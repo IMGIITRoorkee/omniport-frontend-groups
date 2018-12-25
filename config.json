@@ -1,0 +1,8 @@
+{
+  "nomenclature": {
+    "name": "groups",
+    "verboseName": "Groups"
+  },
+  "baseUrl": "/groups",
+  "source": "groups/src/index"
+}
