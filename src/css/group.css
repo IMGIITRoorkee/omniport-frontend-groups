@@ -1,0 +1,59 @@
+.group-container{
+    margin-top: 1em;
+}
+.group-cover-image-container{    
+    background-color: rgba(0, 0, 0, 0.15);
+    min-height: 15em;
+}
+.group-cover-image{    
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.15);
+    height: 23em;
+    object-fit: cover;
+}
+.group-profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -4em;
+    padding-bottom: 1.5em;
+    z-index: 501;
+}
+.group-logo-container{
+    text-align: right;
+    z-index: 501;
+}
+.group-logo{
+    width: 8em;
+    height: 8em;
+}
+.group-display-panel{
+    display: flex;
+    justify-content: space-between;
+}
+.branding-text-container{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1em;
+}
+.branding-heading-container{
+}
+.branding-pencil-container{
+}
+.group-post-container{
+
+}
+.info-card-heading-container{
+    display: flex;
+}
+.info-card-heading{
+    flex-grow: 1;
+}
+.info-card-description-container{
+    white-space: pre-wrap;
+}
+.group-address-container{
+    white-space: pre-line;
+}

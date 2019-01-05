@@ -1,0 +1,43 @@
+.post-header{
+    display: flex;
+}
+.post-user{
+    display: flex;
+    flex-grow: 1;
+}
+.post-user-pic{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 1em;
+}
+.post-user-desc{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+.post-user-name{
+    font-size: 1em;
+    font-weight: 700;
+    color: rgba(0,0,0,.87);
+}
+.post-card-image-container{
+    text-align: center;
+    margin-top: 1em;
+}
+.post-card-image{
+    object-fit: contain;
+    max-height: 30em;
+
+}
+.post-card-description{
+    text-align: left;
+    white-space: pre-wrap;
+}
+.post-app-container{
+    text-align: left;
+}
+.post-card-app-icon{
+    font-size: 16px
+}
