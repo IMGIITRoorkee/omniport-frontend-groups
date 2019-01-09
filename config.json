@@ -4,5 +4,9 @@
     "verboseName": "Groups"
   },
   "baseUrl": "/groups",
-  "source": "groups/src/index"
+  "source": "groups/src/index",
+  "primarySidebar": {
+    "icon": "group",
+    "priority": 4
+  }
 }

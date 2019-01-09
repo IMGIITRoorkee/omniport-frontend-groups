@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Loader, Segment, Icon } from 'semantic-ui-react'
 
-import { getTheme, getThemeObject } from 'formula_one'
 import GroupPostCard from './group-post-card'
 import GroupAddPost from './group-add-post'
 

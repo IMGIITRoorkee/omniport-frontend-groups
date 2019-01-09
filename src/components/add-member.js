@@ -187,10 +187,10 @@ class AddMember extends React.Component {
             </Form.Field>
             <Form.Field>
               <Button
+                basic
                 primary
                 icon='user add'
                 content='Add'
-                labelPosition='left'
                 onClick={this.handleAdd}
                 loading={groupTeam.changing}
               />

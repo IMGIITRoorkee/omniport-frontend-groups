@@ -177,6 +177,8 @@ class GroupTeamList extends React.Component {
                               </Modal.Content>
                               <Modal.Actions>
                                 <Button
+                                  basic
+                                  icon='check'
                                   primary
                                   content='Update'
                                   onClick={this.handleUpdate}
@@ -212,12 +214,20 @@ class GroupTeamList extends React.Component {
                                 action <strong>cannot</strong> be undone.
                               </Modal.Content>
                               <Modal.Actions>
-                                <Button positive onClick={this.handleClose}>
-                                  <Icon name='left arrow' /> Keep
-                                </Button>
-                                <Button negative onClick={this.handleDelete}>
-                                  <Icon name='close' /> Delete, I'm sure
-                                </Button>
+                                <Button
+                                  positive
+                                  onClick={this.handleClose}
+                                  icon='left arrow'
+                                  content='Keep'
+                                  basic
+                                />
+                                <Button
+                                  icon='close'
+                                  content="Delete, I'm sure"
+                                  basic
+                                  negative
+                                  onClick={this.handleDelete}
+                                />
                               </Modal.Actions>
                             </Modal>
                           </div>

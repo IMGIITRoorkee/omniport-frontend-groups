@@ -104,14 +104,12 @@ class GroupAddPost extends React.Component {
                     <label htmlFor='uploadLogo'>
                       <Button
                         as='span'
-                        icon
-                        labelPosition='left'
+                        basic
+                        icon='upload'
+                        content='Upload'
                         color={getTheme()}
                         styleName='inline.margin-bottom-1em'
-                      >
-                        <Icon name='upload' />
-                        Upload
-                      </Button>
+                      />
                     </label>
                     <input
                       type='file'
@@ -145,14 +143,15 @@ class GroupAddPost extends React.Component {
               </Dimmer.Dimmable>
               <Form.Field>
                 <Button
+                  basic
+                  content='Post'
+                  icon='send'
                   color={getTheme()}
                   floated='right'
                   disabled={!this.state.text}
                   onClick={this.handleClick}
                   loading={activeGroupPost.adding}
-                >
-                  Post
-                </Button>
+                />
               </Form.Field>
             </Form>
           </div>

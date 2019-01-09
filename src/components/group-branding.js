@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Card, Image, Header, Icon, Grid, Modal, Dimmer, Button, Loader } from 'semantic-ui-react'
+import { Card, Image, Header, Icon, Grid, Dimmer, Loader } from 'semantic-ui-react'
 
-import { getTheme, DefaultDP } from 'formula_one'
+import { DefaultDP } from 'formula_one'
 import EditBranding from './edit-branding'
 import {
   changeActiveGroup,

@@ -221,9 +221,10 @@ class EditBranding extends React.Component {
               floated='right'
               onClick={this.handleSubmitProfile}
               loading={activeGroup.inEditMode === 'profileBranding'}
-            >
-              Update
-            </Button>
+              content='Update'
+              icon='check'
+              basic
+            />
           </Form>
         </Modal.Content>
         <Modal.Content>
@@ -252,11 +253,12 @@ class EditBranding extends React.Component {
             <Button
               color={getTheme()}
               floated='right'
+              basic
+              icon='check'
+              content='Update'
               onClick={this.handleUpdateContact}
               loading={activeGroup.inEditMode === 'contactBranding'}
-            >
-              Update
-            </Button>
+            />
           </Form>
         </Modal.Content>
         <Modal.Content>

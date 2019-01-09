@@ -12,11 +12,7 @@ import {
 } from 'semantic-ui-react'
 
 import { getTheme } from 'formula_one'
-import {
-  changeActiveGroup,
-  setCountryList,
-  changeActiveGroupLocation
-} from '../actions'
+import { setCountryList, changeActiveGroupLocation } from '../actions'
 import '../css/group.css'
 
 class PurposeCard extends React.Component {
