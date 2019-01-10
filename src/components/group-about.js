@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Card, Icon, Grid } from 'semantic-ui-react'
 
+import { getTheme, getThemeObject } from 'formula_one'
 import PurposeCard from './purpose-card'
 import LocationCard from './location-card'
 import GroupPostList from './group-post-list'
 import AddMember from './add-member'
-import { getTheme, getThemeObject } from 'formula_one'
+import { urlGroupTeam } from '../urls'
+
 import '../css/group.css'
 
 class GroupAbout extends React.Component {
@@ -23,7 +25,7 @@ class GroupAbout extends React.Component {
             <Card.Content
               styleName='info-card-description-container'
               as={Link}
-              to='./team'
+              to={urlGroupTeam(activeGroup.data.slug)}
             >
               <Icon name='user outline' color={getTheme()} />
               <span style={{ color: getThemeObject().hexCode }}>

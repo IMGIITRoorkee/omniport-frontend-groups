@@ -1,3 +1,19 @@
+import appConfig from '../config.json'
+
+// Frontend URLs
+export function urlBaseView () {
+  return `${appConfig.baseUrl}`
+}
+
+export function urlGroupDetailView (slug) {
+  return `${urlBaseView()}/${slug}`
+}
+
+export function urlGroupTeam (slug) {
+  return `${urlGroupDetailView(slug)}/team`
+}
+
+// Backend URLs
 export function urlBase () {
   return `/api/groups/`
 }

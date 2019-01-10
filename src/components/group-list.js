@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import { Tiles } from 'formula_one'
 import { setGroupList } from '../actions'
+import { urlGroupDetailView } from '../urls'
 
 class GroupList extends React.PureComponent {
   componentDidMount () {
@@ -19,7 +20,7 @@ class GroupList extends React.PureComponent {
                 return {
                   name: group.name,
                   desc: <span>{group.shortDescription}</span>,
-                  link: `${this.props.match.path}${group.slug}`,
+                  link: urlGroupDetailView(group.slug),
                   iconName: 'users',
                   imageUrl: group.logo
                 }

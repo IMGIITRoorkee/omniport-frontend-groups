@@ -1,11 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { Container, Icon, Menu, Header } from 'semantic-ui-react'
+import { Container, Menu, Header } from 'semantic-ui-react'
 
-import { getTheme, getThemeObject } from 'formula_one'
 import GroupTeamList from './group-team-list'
 import { setActiveGroupWithTeam } from '../actions/index'
+import { urlGroupDetailView } from '../urls'
+
 import '../css/group-team.css'
 
 class GroupTeam extends React.Component {
@@ -36,17 +37,21 @@ class GroupTeam extends React.Component {
 
   render () {
     const { activeItem } = this.state
+    const { activeGroup } = this.props
     return (
       <div style={{ height: '100%' }}>
         <Container>
           <div styleName='group-team-container'>
-            <Link to='../'>
-              <Icon name='arrow left' color={getTheme()} />
-              <span style={{ color: getThemeObject().hexCode }}>
-                Back to group page
-              </span>
+            <Link
+              to={urlGroupDetailView(
+                activeGroup.data ? activeGroup.data.slug : ''
+              )}
+            >
+              <Header as='h3'>
+                {activeGroup.data && activeGroup.data.name}
+              </Header>
             </Link>
-            <Header as='h3'>Team members</Header>
+            <Header as='h4'>Team members</Header>
             <Menu tabular>
               <Menu.Item
                 name='current'
