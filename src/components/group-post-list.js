@@ -27,7 +27,7 @@ class GroupPostList extends React.Component {
         {isLoaded && !next && (
           <Segment basic textAlign='center'>
             <Icon name='frown outline' />
-            No more bits availaible. You have scrolled enough for today.
+            No more bits available. You have scrolled enough for today.
           </Segment>
         )}
       </Grid.Column>

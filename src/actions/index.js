@@ -12,7 +12,9 @@ import {
   urlActiveGroupContactInfo,
   urlActiveGroupSocialInfo,
   urlActiveGroupSocialInfoSpecific,
-  urlActiveGroupLocationtInfo
+  urlActiveGroupLocationtInfo,
+  urlActiveGroupLocationtInfoEdit,
+  urlActiveGroupContactInfoSpecific
 } from '../urls'
 
 const getActiveGroup = slug => {
@@ -67,7 +69,7 @@ export const setCountryList = () => {
   }
 }
 
-export const setActiveGroup = slug => {
+export const setActiveGroup = (slug, errCallback) => {
   return dispatch => {
     dispatch({
       type: 'SET_POST_LOADED',
@@ -101,11 +103,19 @@ export const setActiveGroup = slug => {
           })
         })
       )
-      .catch(err => {})
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 
-export const changeActiveGroup = (slug, field, data) => {
+export const changeActiveGroup = (
+  slug,
+  field,
+  data,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -125,8 +135,15 @@ export const changeActiveGroup = (slug, field, data) => {
             data: res.data
           }
         })
+        successCallback(res)
       })
-      .catch(err => {})
+      .catch(err => {
+        dispatch({
+          type: 'SET_CHANGING',
+          payload: { isLoaded: true, inEditMode: field }
+        })
+        errCallback(err)
+      })
   }
 }
 
@@ -156,7 +173,13 @@ export const changeActiveGroupWithFile = (slug, field, data) => {
   }
 }
 
-export const changeActiveGroupLocation = (id, field, data) => {
+export const changeActiveGroupLocation = (
+  id,
+  field,
+  data,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -165,19 +188,51 @@ export const changeActiveGroupLocation = (id, field, data) => {
       type: 'SET_CHANGING',
       payload: { isLoaded: true, inEditMode: field }
     })
-    axios
-      .patch(urlActiveGroupLocationtInfo(id), data, { headers: headers })
-      .then(res => {
-        dispatch({
-          type: 'SET_ACTIVE_GROUP_CHANGED_LOCATION',
-          payload: res.data
+    if (id) {
+      axios
+        .patch(urlActiveGroupLocationtInfoEdit(id), data, { headers: headers })
+        .then(res => {
+          dispatch({
+            type: 'SET_ACTIVE_GROUP_CHANGED_LOCATION',
+            payload: res.data
+          })
+          successCallback(res)
         })
-      })
-      .catch(err => {})
+        .catch(err => {
+          dispatch({
+            type: 'SET_CHANGING',
+            payload: { isLoaded: true, inEditMode: field }
+          })
+          errCallback(err)
+        })
+    } else {
+      axios
+        .post(urlActiveGroupLocationtInfo(), data, { headers: headers })
+        .then(res => {
+          dispatch({
+            type: 'SET_ACTIVE_GROUP_CHANGED_LOCATION',
+            payload: res.data
+          })
+          successCallback(res)
+        })
+        .catch(err => {
+          dispatch({
+            type: 'SET_CHANGING',
+            payload: { isLoaded: true, inEditMode: field }
+          })
+          errCallback(err)
+        })
+    }
   }
 }
 
-export const changeActiveGroupContact = (id, field, data) => {
+export const changeActiveGroupContact = (
+  id,
+  field,
+  data,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -186,19 +241,52 @@ export const changeActiveGroupContact = (id, field, data) => {
       type: 'SET_CHANGING',
       payload: { isLoaded: true, inEditMode: field }
     })
-    axios
-      .patch(urlActiveGroupContactInfo(id), data, { headers: headers })
-      .then(res => {
-        dispatch({
-          type: 'SET_ACTIVE_GROUP_CHANGED_CONTACT',
-          payload: res.data
+    if (id) {
+      axios
+        .patch(urlActiveGroupContactInfoSpecific(id), data, {
+          headers: headers
         })
-      })
-      .catch(err => {})
+        .then(res => {
+          dispatch({
+            type: 'SET_ACTIVE_GROUP_CHANGED_CONTACT',
+            payload: res.data
+          })
+          successCallback(res)
+        })
+        .catch(err => {
+          dispatch({
+            type: 'SET_CHANGING',
+            payload: { isLoaded: true, inEditMode: '' }
+          })
+          errCallback(err)
+        })
+    } else {
+      axios
+        .post(urlActiveGroupContactInfo(), data, { headers: headers })
+        .then(res => {
+          dispatch({
+            type: 'SET_ACTIVE_GROUP_CHANGED_CONTACT',
+            payload: res.data
+          })
+          successCallback(res)
+        })
+        .catch(err => {
+          dispatch({
+            type: 'SET_CHANGING',
+            payload: { isLoaded: true, inEditMode: '' }
+          })
+          errCallback(err)
+        })
+    }
   }
 }
 
-export const addActiveGroupSocial = (field, data, callback) => {
+export const addActiveGroupSocial = (
+  field,
+  data,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -214,13 +302,21 @@ export const addActiveGroupSocial = (field, data, callback) => {
           type: 'SET_ACTIVE_GROUP_ADD_SOCIAL',
           payload: res.data
         })
-        callback(res)
+        successCallback(res)
       })
-      .catch(err => {})
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 
-export const changeActiveGroupSocial = (id, field, data, callback) => {
+export const changeActiveGroupSocial = (
+  id,
+  field,
+  data,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -236,13 +332,20 @@ export const changeActiveGroupSocial = (id, field, data, callback) => {
           type: 'SET_ACTIVE_GROUP_CHANGED_SOCIAL',
           payload: res.data
         })
+        successCallback(res)
       })
-      .then(res => callback(res))
-      .catch(err => {})
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 
-export const deleteActiveGroupSocial = (id, field, callback) => {
+export const deleteActiveGroupSocial = (
+  id,
+  field,
+  successCallback,
+  errCallback
+) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -258,9 +361,11 @@ export const deleteActiveGroupSocial = (id, field, callback) => {
           type: 'SET_ACTIVE_GROUP_DELETE_SOCIAL',
           payload: id
         })
-        callback(id)
+        successCallback(id)
       })
-      .catch(err => {})
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 
@@ -290,7 +395,7 @@ export const getMorePost = (slug, page) => {
   }
 }
 
-export const addPost = data => {
+export const addPost = (data, successCallback, errCallback) => {
   let headers = {
     'Content-Type': 'multipart/form-data',
     'X-CSRFToken': getCookie('csrftoken')
@@ -307,12 +412,14 @@ export const addPost = data => {
           type: 'ADD_POST_TO_ACTIVEGROUP',
           payload: res.data
         })
+        successCallback(res)
       })
       .catch(err => {
         dispatch({
           type: 'SET_POST_ADDING',
           payload: false
         })
+        errCallback(err)
       })
   }
 }
@@ -343,7 +450,7 @@ export const removePost = id => {
   }
 }
 
-export const setActiveGroupWithTeam = (slug, active) => {
+export const setActiveGroupWithTeam = (slug, active, errCallback) => {
   return dispatch => {
     dispatch({
       type: 'SET_TEAM_LOADED',
@@ -377,7 +484,9 @@ export const setActiveGroupWithTeam = (slug, active) => {
           })
         })
       )
-      .catch(err => {})
+      .catch(err => {
+        errCallback(err)
+      })
   }
 }
 
@@ -407,7 +516,7 @@ export const getMoreTeam = page => {
   }
 }
 
-export const changeTeamMember = (id, data) => {
+export const changeTeamMember = (id, data, successCallback, errCallback) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -423,12 +532,14 @@ export const changeTeamMember = (id, data) => {
           type: 'CHANGE_TEAM',
           payload: res.data
         })
+        successCallback(res)
       })
       .catch(err => {
         dispatch({
           type: 'SET_MEMBER_CHANGING',
           payload: false
         })
+        errCallback(err)
       })
   }
 }
@@ -459,7 +570,7 @@ export const removeMember = id => {
   }
 }
 
-export const addTeam = data => {
+export const addTeam = (data, successCallback, errCallback) => {
   let headers = {
     'X-CSRFToken': getCookie('csrftoken')
   }
@@ -475,12 +586,14 @@ export const addTeam = data => {
           type: 'SET_MEMBER_CHANGING',
           payload: false
         })
+        successCallback(res)
       })
       .catch(err => {
         dispatch({
           type: 'SET_MEMBER_CHANGING',
           payload: false
         })
+        errCallback(err)
       })
   }
 }

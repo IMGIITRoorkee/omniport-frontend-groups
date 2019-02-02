@@ -8,11 +8,14 @@ import {
   Segment,
   Search,
   Button,
-  Checkbox
+  Checkbox,
+  Message
 } from 'semantic-ui-react'
+import { capitalize, startCase } from 'lodash'
 
 import { getTheme, UserCard } from 'formula_one'
 import { urlSearchPerson } from '../urls'
+import { errorExist } from '../utils'
 import '../css/group-team.css'
 import { addTeam } from '../actions'
 
@@ -28,7 +31,10 @@ class AddMember extends React.Component {
       startDate: '',
       endDate: '',
       hasEditRights: false,
-      hasAdminRights: false
+      hasAdminRights: false,
+      success: false,
+      error: false,
+      message: ''
     }
   }
   handleSearchChange = (e, { value }) => {
@@ -78,8 +84,13 @@ class AddMember extends React.Component {
       hasEditRights: this.state.hasEditRights,
       group: this.props.activeGroup.data.id
     }
-    this.props.AddTeam(data)
+    this.props.AddTeam(data, this.successCallback, this.errCallback)
+  }
+  successCallback = res => {
     this.setState({
+      success: true,
+      error: false,
+      message: res.data,
       value: '',
       results: [],
       designation: '',
@@ -90,8 +101,15 @@ class AddMember extends React.Component {
       hasAdminRights: false
     })
   }
+  errCallback = err => {
+    this.setState({
+      success: false,
+      error: true,
+      message: err.response.data
+    })
+  }
   render () {
-    const { isLoading, value, results } = this.state
+    const { isLoading, value, results, message, error, success } = this.state
     const { groupTeam } = this.props
     const resultRenderer = ({ person, title }) => (
       <UserCard
@@ -110,7 +128,29 @@ class AddMember extends React.Component {
         </Segment>
         <Segment attached='bottom'>
           <Form>
-            <Form.Field>
+            {error && (
+              <Message
+                negative
+                header='Error'
+                list={Object.keys(message)
+                  .map(cat => {
+                    return message[cat].map(x => {
+                      return `${capitalize(startCase(cat))}: ${x}`
+                    })
+                  })
+                  .map(x => {
+                    return x[0]
+                  })}
+              />
+            )}
+            {success && (
+              <Message
+                positive
+                header='Success'
+                content={`Successfuly added ${message.person.fullName}`}
+              />
+            )}
+            <Form.Field required error={error && errorExist(message, 'person')}>
               <label>Select</label>
               <Search
                 loading={isLoading}
@@ -124,8 +164,7 @@ class AddMember extends React.Component {
                 placeholder='Add members by their name or contact information'
               />
             </Form.Field>
-
-            <Form.Field>
+            <Form.Field error={error && errorExist(message, 'designation')}>
               <label>Designation</label>
               <Form.Input
                 name='designation'
@@ -135,7 +174,7 @@ class AddMember extends React.Component {
                 fluid
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={error && errorExist(message, 'post')}>
               <label>Post</label>
               <Form.Input
                 name='post'
@@ -145,7 +184,10 @@ class AddMember extends React.Component {
                 fluid
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field
+              required
+              error={error && errorExist(message, 'startDate')}
+            >
               <label>Joining date</label>
               <DateInput
                 dateFormat='YYYY-MM-DD'
@@ -157,7 +199,7 @@ class AddMember extends React.Component {
                 onChange={this.handleDateChange}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={error && errorExist(message, 'endDate')}>
               <label>End date</label>
               <DateInput
                 dateFormat='YYYY-MM-DD'
@@ -169,7 +211,7 @@ class AddMember extends React.Component {
                 iconPosition='left'
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={error && errorExist(message, 'hasEditRights')}>
               <Checkbox
                 onChange={this.handleCheckChange}
                 checked={this.state.hasEditRights}
@@ -177,7 +219,7 @@ class AddMember extends React.Component {
                 label='Has edit rights'
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field error={error && errorExist(message, 'hasAdminRights')}>
               <Checkbox
                 onChange={this.handleCheckChange}
                 checked={this.state.hasAdminRights}
@@ -210,8 +252,8 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    AddTeam: data => {
-      dispatch(addTeam(data))
+    AddTeam: (data, successCallback, errCallback) => {
+      dispatch(addTeam(data, successCallback, errCallback))
     }
   }
 }

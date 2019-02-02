@@ -1,15 +1,34 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { Card, Image, Icon, Dropdown } from 'semantic-ui-react'
+import { Card, Image, Icon, Dropdown, Modal, Button } from 'semantic-ui-react'
 
 import { DefaultDP } from 'formula_one'
 import { removePost } from '../actions'
 import '../css/group-post-card.css'
 
 class GroupPostCard extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      modalOpen: false
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      modalOpen: false
+    })
+  }
+
+  handleOpen = () => {
+    this.setState({
+      modalOpen: true
+    })
+  }
+
   render () {
-    const { post, activeGroup, activeGroupPost } = this.props
+    const { post, activeGroup } = this.props
     return (
       <Card fluid>
         <Card.Content>
@@ -37,13 +56,45 @@ class GroupPostCard extends React.Component {
                 {activeGroup.hasEditRights && (
                   <Dropdown icon='ellipsis vertical' pointing='top right'>
                     <Dropdown.Menu>
-                      <Dropdown.Item
-                        onClick={() => {
-                          this.props.RemovePost(post.id)
-                        }}
-                      >
-                        <Icon name='trash alternate outline' />
-                        Delete
+                      <Dropdown.Item>
+                        <Modal
+                          trigger={
+                            <span onClick={this.handleOpen}>
+                              <Icon name='trash alternate outline' />
+                              Delete
+                            </span>
+                          }
+                          open={this.state.modalOpen}
+                          onClose={this.handleClose}
+                          size='small'
+                          dimmer='blurring'
+                        >
+                          <Modal.Header>
+                            <Icon name='warning sign' color='red' />
+                            Confirm irreversible deletion
+                          </Modal.Header>
+                          <Modal.Content>
+                            Are you sure you want to remove this post?
+                          </Modal.Content>
+                          <Modal.Actions>
+                            <Button
+                              positive
+                              onClick={this.handleClose}
+                              icon='left arrow'
+                              content='Keep'
+                              basic
+                            />
+                            <Button
+                              icon='close'
+                              content="Delete, I'm sure"
+                              basic
+                              negative
+                              onClick={() => {
+                                this.props.RemovePost(post.id)
+                              }}
+                            />
+                          </Modal.Actions>
+                        </Modal>
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>

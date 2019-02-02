@@ -31,10 +31,18 @@ export function urlActiveGroupPostSpecific (id) {
 }
 
 export function urlActiveGroupContactInfo (id) {
+  return `${urlBase()}contact_information/`
+}
+
+export function urlActiveGroupContactInfoSpecific (id) {
   return `${urlBase()}contact_information/${id}/`
 }
 
-export function urlActiveGroupLocationtInfo (id) {
+export function urlActiveGroupLocationtInfo () {
+  return `${urlBase()}location_information/`
+}
+
+export function urlActiveGroupLocationtInfoEdit (id) {
   return `${urlBase()}location_information/${id}/`
 }
 

@@ -9,10 +9,13 @@ import {
   Dimmer,
   Segment,
   Icon,
-  Label
+  Label,
+  Message
 } from 'semantic-ui-react'
+import { capitalize, startCase } from 'lodash'
 
 import { DefaultDP, getTheme } from 'formula_one'
+import { errorExist } from '../utils'
 import { addPost } from '../actions'
 
 import inline from 'formula_one/src/css/inline.css'
@@ -24,7 +27,10 @@ class GroupAddPost extends React.Component {
     this.state = {
       text: '',
       fileSrc: '',
-      logo: null
+      logo: null,
+      success: false,
+      error: false,
+      message: ''
     }
   }
   removeImage = () => {
@@ -53,14 +59,27 @@ class GroupAddPost extends React.Component {
     if (this.state.logo) {
       formData.append('image', this.state.logo)
     }
-    this.props.AddPost(formData)
+    this.props.AddPost(formData, this.successCallback, this.errCallback)
+  }
+  successCallback = res => {
     this.setState({
       text: '',
       logo: null,
-      fileSrc: ''
+      fileSrc: '',
+      success: true,
+      error: false,
+      message: res.data
+    })
+  }
+  errCallback = err => {
+    this.setState({
+      success: false,
+      error: true,
+      message: err.response.data
     })
   }
   render () {
+    const { error, message, success } = this.state
     const { activeGroup, activeGroupPost } = this.props
     const { fileSrc } = this.state
     const content = (
@@ -95,8 +114,24 @@ class GroupAddPost extends React.Component {
         <Card.Content>
           <div styleName='main.post-card-description'>
             <Form>
+              {error && (
+                <Message
+                  negative
+                  icon='frown outline'
+                  header='Error'
+                  list={Object.keys(message)
+                    .map(cat => {
+                      return message[cat].map(x => {
+                        return `${capitalize(startCase(cat))}: ${x}`
+                      })
+                    })
+                    .map(x => {
+                      return x[0]
+                    })}
+                />
+              )}
               <Dimmer.Dimmable dimmed={activeGroupPost.adding}>
-                <Form.Field>
+                <Form.Field error={error && errorExist(message, 'image')}>
                   <label>Attach a picture</label>
                 </Form.Field>
                 {!fileSrc ? (
@@ -128,7 +163,10 @@ class GroupAddPost extends React.Component {
                     />
                   </Segment>
                 )}
-                <Form.Field>
+                <Form.Field
+                  required
+                  error={error && errorExist(message, 'text')}
+                >
                   <TextArea
                     autoHeight
                     rows={2}
@@ -169,8 +207,8 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    AddPost: data => {
-      dispatch(addPost(data))
+    AddPost: (data, successCallback, errCallback) => {
+      dispatch(addPost(data, successCallback, errCallback))
     }
   }
 }

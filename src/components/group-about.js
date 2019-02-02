@@ -20,6 +20,7 @@ class GroupAbout extends React.Component {
         <Grid.Column width={5}>
           <PurposeCard heading='About' field='about' />
           <PurposeCard heading='Mission' field='mission' />
+          <PurposeCard heading='Short description' field='shortDescription' />
           <LocationCard heading='Location' field='locationInformation' />
           <Card color={getTheme()} fluid>
             <Card.Content

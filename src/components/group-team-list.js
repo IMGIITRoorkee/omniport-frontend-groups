@@ -9,30 +9,35 @@ import {
   Form,
   Input,
   Checkbox,
-  Button
+  Button,
+  Message
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
+import { capitalize, startCase } from 'lodash'
 
 import { UserCard } from 'formula_one'
-import {
-  setActiveGroupWithTeam,
-  changeTeamMember,
-  removeMember
-} from '../actions'
+import { errorExist } from '../utils'
+import { changeTeamMember, removeMember } from '../actions'
 import '../css/group-team.css'
 
 class GroupTeamList extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      editModalOpen: false,
+      editModalOpen: '',
       editUser: {},
-      toDelete: {}
+      toDelete: {},
+      error: false,
+      success: false,
+      message: ''
     }
   }
   handleEdit = member => {
     this.setState({
-      editModalOpen: true,
+      error: false,
+      success: false,
+      message: '',
+      editModalOpen: member.id,
       editUser: member,
       designation: member.designation || '',
       post: member.post || '',
@@ -62,25 +67,49 @@ class GroupTeamList extends React.Component {
       hasAdminRights: this.state.hasAdminRights,
       hasEditRights: this.state.hasEditRights
     }
-    this.props.ChangeTeamMember(this.state.editUser.id, data)
+    this.props.ChangeTeamMember(
+      this.state.editUser.id,
+      data,
+      this.successCallback,
+      this.errCallback
+    )
   }
-  handleClose = () => this.setState({ modalOpen: false, toDelete: {} })
+  handleClose = () => this.setState({ modalOpen: '', toDelete: {} })
+  handleEditModalClose = () => {
+    this.setState({ editModalOpen: '' })
+  }
   handleRemove = member => {
     this.setState({
-      modalOpen: true,
+      modalOpen: member.id,
       toDelete: member
     })
   }
   handleDelete = () => {
     this.props.RemoveMember(this.state.toDelete.id)
-    this.setState({ modalOpen: false, toDelete: {} })
+    this.setState({ modalOpen: '', toDelete: {} })
   }
   handleCheckChange = (e, { name, checked }) => {
     this.setState({
       [name]: checked
     })
   }
+  successCallback = res => {
+    this.setState({
+      editModalOpen: false,
+      success: true,
+      error: false,
+      message: res.data
+    })
+  }
+  errCallback = err => {
+    this.setState({
+      success: false,
+      error: true,
+      message: err.response.data
+    })
+  }
   render () {
+    const { message, error, success } = this.state
     const { activeGroup, groupTeam } = this.props
     const { hasAdminRights } = activeGroup
     const { team } = groupTeam
@@ -101,6 +130,7 @@ class GroupTeamList extends React.Component {
                         <React.Fragment>
                           <div>
                             <Modal
+                              open={this.state.editModalOpen === member.id}
                               trigger={
                                 <Icon
                                   name='pencil'
@@ -109,6 +139,7 @@ class GroupTeamList extends React.Component {
                                   }}
                                 />
                               }
+                              onClose={this.handleEditModalClose}
                               size='tiny'
                             >
                               <Modal.Header>Edit person</Modal.Header>
@@ -119,7 +150,29 @@ class GroupTeamList extends React.Component {
                                   image={member.person.displayPicture}
                                 />
                                 <Form>
-                                  <Form.Field>
+                                  {error && (
+                                    <Message
+                                      negative
+                                      header='Error'
+                                      list={Object.keys(message)
+                                        .map(cat => {
+                                          return message[cat].map(x => {
+                                            return `${capitalize(
+                                              startCase(cat)
+                                            )}: ${x}`
+                                          })
+                                        })
+                                        .map(x => {
+                                          return x[0]
+                                        })}
+                                    />
+                                  )}
+                                  <Form.Field
+                                    error={
+                                      error &&
+                                      errorExist(message, 'designation')
+                                    }
+                                  >
                                     <label>Designation</label>
                                     <Input
                                       name='designation'
@@ -127,7 +180,9 @@ class GroupTeamList extends React.Component {
                                       onChange={this.handleChange}
                                     />
                                   </Form.Field>
-                                  <Form.Field>
+                                  <Form.Field
+                                    error={error && errorExist(message, 'post')}
+                                  >
                                     <label>Post</label>
                                     <Input
                                       name='post'
@@ -135,7 +190,12 @@ class GroupTeamList extends React.Component {
                                       onChange={this.handleChange}
                                     />
                                   </Form.Field>
-                                  <Form.Field>
+                                  <Form.Field
+                                    error={
+                                      error && errorExist(message, 'startDate')
+                                    }
+                                    required
+                                  >
                                     <label>Joining date</label>
                                     <DateInput
                                       dateFormat='YYYY-MM-DD'
@@ -147,7 +207,11 @@ class GroupTeamList extends React.Component {
                                       onChange={this.handleDateChange}
                                     />
                                   </Form.Field>
-                                  <Form.Field>
+                                  <Form.Field
+                                    error={
+                                      error && errorExist(message, 'endDate')
+                                    }
+                                  >
                                     <label>End date</label>
                                     <DateInput
                                       dateFormat='YYYY-MM-DD'
@@ -159,13 +223,25 @@ class GroupTeamList extends React.Component {
                                       iconPosition='left'
                                     />
                                   </Form.Field>
-                                  <Form.Field>
+                                  <Form.Field
+                                    error={
+                                      error &&
+                                      errorExist(message, 'hasEditRights')
+                                    }
+                                  >
                                     <Checkbox
                                       onChange={this.handleCheckChange}
                                       name='hasEditRights'
                                       label='Has edit rights'
                                       defaultChecked={this.state.hasEditRights}
                                     />
+                                  </Form.Field>
+                                  <Form.Field
+                                    error={
+                                      error &&
+                                      errorExist(message, 'hasAdminRights')
+                                    }
+                                  >
                                     <Checkbox
                                       onChange={this.handleCheckChange}
                                       name='hasAdminRights'
@@ -194,7 +270,7 @@ class GroupTeamList extends React.Component {
                                   name='close'
                                 />
                               }
-                              open={this.state.modalOpen}
+                              open={this.state.modalOpen === member.id}
                               onClose={this.handleClose}
                               size='small'
                               dimmer='blurring'
@@ -246,7 +322,7 @@ class GroupTeamList extends React.Component {
           {groupTeam.isLoaded && !team.next ? (
             <Segment basic textAlign='center'>
               <Icon name='frown outline' />
-              No more members availaible. You have scrolled enough for today.
+              No more members available. You have scrolled enough for today.
             </Segment>
           ) : (
             <Segment basic textAlign='center'>
@@ -268,11 +344,8 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    SetActiveGroupWithTeam: (slug, active) => {
-      dispatch(setActiveGroupWithTeam(slug, active))
-    },
-    ChangeTeamMember: (id, data) => {
-      dispatch(changeTeamMember(id, data))
+    ChangeTeamMember: (id, data, successCallback, errCallback) => {
+      dispatch(changeTeamMember(id, data, successCallback, errCallback))
     },
     RemoveMember: id => {
       dispatch(removeMember(id))

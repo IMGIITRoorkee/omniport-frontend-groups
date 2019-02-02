@@ -14,7 +14,7 @@ class GroupList extends React.PureComponent {
     return (
       <React.Fragment>
         <Tiles
-          tile={
+          tiles={
             groupList.isLoaded
               ? groupList.data.map(group => {
                 return {

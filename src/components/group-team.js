@@ -18,7 +18,13 @@ class GroupTeam extends React.Component {
     }
   }
   componentDidMount () {
-    this.props.SetActiveGroupWithTeam(this.props.match.params.slug, true)
+    this.props.SetActiveGroupWithTeam(
+      this.props.match.params.slug,
+      true,
+      err => {
+        this.props.history.push('/404')
+      }
+    )
   }
   handleClick = (e, { name }) => {
     const data = {}
@@ -80,8 +86,8 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    SetActiveGroupWithTeam: (slug, active) => {
-      dispatch(setActiveGroupWithTeam(slug, active))
+    SetActiveGroupWithTeam: (slug, active, errCallback) => {
+      dispatch(setActiveGroupWithTeam(slug, active, errCallback))
     }
   }
 }

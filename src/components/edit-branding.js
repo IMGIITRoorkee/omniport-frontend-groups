@@ -7,9 +7,11 @@ import {
   Form,
   Dropdown,
   Icon,
-  Header
+  Header,
+  Message
 } from 'semantic-ui-react'
 import { YearInput } from 'semantic-ui-calendar-react'
+import { capitalize, startCase } from 'lodash'
 
 import { getTheme } from 'formula_one'
 import {
@@ -21,6 +23,7 @@ import {
   changeActiveGroupSocial,
   deleteActiveGroupSocial
 } from '../actions'
+import { errorExist } from '../utils'
 
 import inline from 'formula_one/src/css/inline.css'
 import blocks from '../css/group.css'
@@ -44,10 +47,12 @@ class EditBranding extends React.Component {
       socialInfo: data.socialInformation[0]
         ? data.socialInformation[0].links
         : [],
-      shortDescription: data.shortDescription,
       yearOfInception: data.yearOfInception,
       newLinkUrl: '',
-      newLinkSite: ''
+      newLinkSite: '',
+      success: '',
+      error: '',
+      message: ''
     }
   }
 
@@ -106,15 +111,30 @@ class EditBranding extends React.Component {
       site: this.state.newLinkSite,
       url: this.state.newLinkUrl
     }
-    this.props.AddActiveGroupSocial('addSocial', data, res => {
-      console.log(res)
-      this.setState({
-        socialInfo: [...this.state.socialInfo, res.data]
-      })
-    })
+    this.props.AddActiveGroupSocial(
+      'addSocial',
+      data,
+      this.successAddLinkCallback,
+      this.errAddLinkCallback
+    )
+  }
+
+  successAddLinkCallback = res => {
     this.setState({
+      socialInfo: [...this.state.socialInfo, res.data],
       newLinkSite: '',
-      newLinkUrl: ''
+      newLinkUrl: '',
+      success: `link${res.data.id}`,
+      error: '',
+      message: res.data
+    })
+  }
+
+  errAddLinkCallback = err => {
+    this.setState({
+      error: `linknew`,
+      success: '',
+      message: err.response.data
     })
   }
 
@@ -122,12 +142,29 @@ class EditBranding extends React.Component {
     const data = this.state.socialInfo.find(x => {
       return x.id === id
     })
-    this.props.ChangeActiveGroupSocial(id, `socialLink${id}`, data, res => {
-      this.setState({
-        socialInfo: this.state.socialInfo.map(x => {
-          return x.id === res.data.id ? res.data : x
-        })
+    this.props.ChangeActiveGroupSocial(
+      id,
+      `socialLink${id}`,
+      data,
+      this.successUpdateLinkCallback,
+      err => this.errUpdateLinkCallback(err, id)
+    )
+  }
+
+  successUpdateLinkCallback = res => {
+    this.setState({
+      socialInfo: this.state.socialInfo.map(x => {
+        return x.id === res.data.id ? res.data : x
       })
+    })
+  }
+
+  errUpdateLinkCallback = (err, id) => {
+    console.log(id, 'iiidid')
+    this.setState({
+      error: `link${id}`,
+      success: '',
+      message: err.response.data
     })
   }
 
@@ -142,16 +179,17 @@ class EditBranding extends React.Component {
   }
 
   handleSubmitProfile = () => {
-    const { name, shortDescription, yearOfInception } = this.state
+    const { name, yearOfInception } = this.state
     let data = {
       name,
-      shortDescription,
       yearOfInception
     }
     this.props.ChangeActiveGroup(
       this.props.activeGroup.data.slug,
       'profileBranding',
-      data
+      data,
+      this.successProfileCallback,
+      this.errProfileCallback
     )
   }
 
@@ -163,13 +201,49 @@ class EditBranding extends React.Component {
       emailAddress
     }
     this.props.ChangeActiveGroupContact(
-      this.props.activeGroup.data.contactInformation[0].id,
+      this.props.activeGroup.data.contactInformation[0] &&
+        this.props.activeGroup.data.contactInformation[0].id,
       'contactBranding',
-      data
+      data,
+      this.successContactCallback,
+      this.errContactCallback
     )
   }
 
+  successContactCallback = res => {
+    this.setState({
+      error: '',
+      success: 'contactInfo',
+      message: res.data
+    })
+  }
+
+  errContactCallback = err => {
+    this.setState({
+      success: '',
+      error: 'contactInfo',
+      message: err.response.data
+    })
+  }
+
+  successProfileCallback = res => {
+    this.setState({
+      error: '',
+      success: 'profileInfo',
+      message: res.data
+    })
+  }
+
+  errProfileCallback = err => {
+    this.setState({
+      success: '',
+      error: 'profileInfo',
+      message: err.response.data
+    })
+  }
+
   render () {
+    const { success, error, message } = this.state
     const { activeGroup, countryList } = this.props
     const socialOptions = countryList.isLoaded
       ? countryList.data.actions.POST.socialInformation.child.children.links
@@ -181,7 +255,34 @@ class EditBranding extends React.Component {
         <Modal.Content>
           <Header dividing>Profile</Header>
           <Form>
-            <Form.Field>
+            {error === 'profileInfo' && (
+              <Message
+                negative
+                icon='frown outline'
+                header='Error'
+                list={Object.keys(message)
+                  .map(cat => {
+                    return message[cat].map(x => {
+                      return `${capitalize(startCase(cat))}: ${x}`
+                    })
+                  })
+                  .map(x => {
+                    return x[0]
+                  })}
+              />
+            )}
+            {success === 'profileInfo' && (
+              <Message
+                positive
+                icon='check'
+                header='Success'
+                content='Successfuly updated profile.'
+              />
+            )}
+            <Form.Field
+              required
+              error={errorExist(message, 'name') && error === 'profile'}
+            >
               <label>Group name</label>
               <Input
                 autoComplete='off'
@@ -191,7 +292,12 @@ class EditBranding extends React.Component {
                 value={this.state.name}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field
+              required
+              error={
+                errorExist(message, 'yearOfInception') && error === 'profile'
+              }
+            >
               <label>Year of inception</label>
               <YearInput
                 autoComplete='off'
@@ -201,23 +307,9 @@ class EditBranding extends React.Component {
                 value={String(this.state.yearOfInception)}
               />
             </Form.Field>
-            <Form.Field>
-              <label>Short description</label>
-              <Input
-                autoComplete='off'
-                onChange={this.handleChange}
-                placeholder='Short description'
-                name='shortDescription'
-                value={this.state.shortDescription}
-              />
-            </Form.Field>
             <Button
               color={getTheme()}
-              disabled={
-                !this.state.name ||
-                !this.state.shortDescription ||
-                !this.state.yearOfInception
-              }
+              disabled={!this.state.name || !this.state.yearOfInception}
               floated='right'
               onClick={this.handleSubmitProfile}
               loading={activeGroup.inEditMode === 'profileBranding'}
@@ -230,7 +322,37 @@ class EditBranding extends React.Component {
         <Modal.Content>
           <Header dividing>Contact information</Header>
           <Form>
-            <Form.Field>
+            {error === 'contactInfo' && (
+              <Message
+                negative
+                icon='frown outline'
+                header='Error'
+                list={Object.keys(message)
+                  .map(cat => {
+                    return message[cat].map(x => {
+                      return `${capitalize(startCase(cat))}: ${x}`
+                    })
+                  })
+                  .map(x => {
+                    return x[0]
+                  })}
+              />
+            )}
+            {success === 'contactInfo' && (
+              <Message
+                positive
+                icon='check'
+                header='Success'
+                content='Successfuly updated contact information.'
+              />
+            )}
+            <Form.Field
+              required
+              error={
+                errorExist(message, 'primaryPhoneNumber') &&
+                error === 'contactInfo'
+              }
+            >
               <label>Primary phone number</label>
               <Input
                 autoComplete='off'
@@ -240,7 +362,12 @@ class EditBranding extends React.Component {
                 value={this.state.primaryPhoneNumber}
               />
             </Form.Field>
-            <Form.Field>
+            <Form.Field
+              required
+              error={
+                errorExist(message, 'emailAddress') && error === 'contactInfo'
+              }
+            >
               <label>Email address</label>
               <Input
                 autoComplete='off'
@@ -264,11 +391,33 @@ class EditBranding extends React.Component {
         <Modal.Content>
           <Header dividing>Social information</Header>
           <Form>
+            {error.includes('link') && (
+              <Message
+                icon='frown outline'
+                negative
+                header='Error'
+                list={Object.keys(message)
+                  .map(cat => {
+                    return message[cat].map(x => {
+                      return `${capitalize(startCase(cat))}: ${x}`
+                    })
+                  })
+                  .map(x => {
+                    return x[0]
+                  })}
+              />
+            )}
+            {success.includes('link') && (
+              <Message positive icon='check' header='Success' />
+            )}
             <Form.Field>
               <label>Link</label>
               {this.state.socialInfo.map(link => {
                 return (
-                  <Form.Field key={link.id}>
+                  <Form.Field
+                    key={link.id}
+                    error={error.includes('link') && error === `link${link.id}`}
+                  >
                     <Input
                       autoComplete='off'
                       label={
@@ -309,7 +458,7 @@ class EditBranding extends React.Component {
                   </Form.Field>
                 )
               })}
-              <Form.Field>
+              <Form.Field error={error.includes('link') && error === 'linknew'}>
                 <Input
                   autoComplete='off'
                   label={
@@ -353,17 +502,35 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    ChangeActiveGroup: (slug, field, data) => {
-      dispatch(changeActiveGroup(slug, field, data))
+    ChangeActiveGroup: (slug, field, data, successCallback, errCallback) => {
+      dispatch(
+        changeActiveGroup(slug, field, data, successCallback, errCallback)
+      )
     },
-    ChangeActiveGroupContact: (id, field, data) => {
-      dispatch(changeActiveGroupContact(id, field, data))
+    ChangeActiveGroupContact: (
+      id,
+      field,
+      data,
+      successCallback,
+      errCallback
+    ) => {
+      dispatch(
+        changeActiveGroupContact(id, field, data, successCallback, errCallback)
+      )
     },
-    AddActiveGroupSocial: (field, data, callback) => {
-      dispatch(addActiveGroupSocial(field, data, callback))
+    AddActiveGroupSocial: (field, data, successCallback, errCallback) => {
+      dispatch(addActiveGroupSocial(field, data, successCallback, errCallback))
     },
-    ChangeActiveGroupSocial: (id, field, data, callback) => {
-      dispatch(changeActiveGroupSocial(id, field, data, callback))
+    ChangeActiveGroupSocial: (
+      id,
+      field,
+      data,
+      successCallback,
+      errCallback
+    ) => {
+      dispatch(
+        changeActiveGroupSocial(id, field, data, successCallback, errCallback)
+      )
     },
     DeleteActiveGroupSocial: (id, field, callback) => {
       dispatch(deleteActiveGroupSocial(id, field, callback))

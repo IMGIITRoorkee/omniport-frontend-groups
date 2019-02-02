@@ -9,7 +9,9 @@ import '../css/group.css'
 
 class GroupDetail extends React.Component {
   componentDidMount () {
-    this.props.SetActiveGroup(this.props.match.params.slug)
+    this.props.SetActiveGroup(this.props.match.params.slug, err => {
+      this.props.history.push('/404')
+    })
   }
 
   render () {
@@ -34,8 +36,8 @@ function mapStateToProps (state) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    SetActiveGroup: slug => {
-      dispatch(setActiveGroup(slug))
+    SetActiveGroup: (slug, errCallback) => {
+      dispatch(setActiveGroup(slug, errCallback))
     }
   }
 }

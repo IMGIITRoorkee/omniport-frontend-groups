@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, Redirect, Switch } from 'react-router-dom'
 import { isMobile, isBrowser } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 
@@ -66,17 +66,20 @@ class App extends React.PureComponent {
             <div styleName='main.app-main'>
               {isBrowser && <Sidebar />}
               <Scrollbars autoHide onScrollFrame={this.handleScroll}>
-                <Route exact path={`${match.path}`} component={GroupList} />
-                <Route
-                  exact
-                  path={`${match.path}:slug`}
-                  component={GroupDetail}
-                />
-                <Route
-                  exact
-                  path={`${match.path}:slug/team`}
-                  component={GroupTeam}
-                />
+                <Switch>
+                  <Route exact path={`${match.path}`} component={GroupList} />
+                  <Route
+                    exact
+                    path={`${match.path}:slug`}
+                    component={GroupDetail}
+                  />
+                  <Route
+                    exact
+                    path={`${match.path}:slug/team`}
+                    component={GroupTeam}
+                  />
+                  <Route render={props => <Redirect to='/404' />} />
+                </Switch>
               </Scrollbars>
             </div>
           </AppMain>
