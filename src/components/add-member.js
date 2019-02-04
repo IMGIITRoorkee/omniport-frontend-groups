@@ -16,7 +16,6 @@ import { capitalize, startCase } from 'lodash'
 import { getTheme, UserCard } from 'formula_one'
 import { urlSearchPerson } from '../urls'
 import { errorExist } from '../utils'
-import '../css/group-team.css'
 import { addTeam } from '../actions'
 
 class AddMember extends React.Component {
@@ -229,7 +228,6 @@ class AddMember extends React.Component {
             </Form.Field>
             <Form.Field>
               <Button
-                basic
                 primary
                 icon='user add'
                 content='Add'

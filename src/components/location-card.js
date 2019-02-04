@@ -9,7 +9,8 @@ import {
   Loader,
   Dimmer,
   Flag,
-  Message
+  Message,
+  Dropdown
 } from 'semantic-ui-react'
 import { startCase, capitalize } from 'lodash'
 
@@ -101,11 +102,20 @@ class LocationCard extends React.Component {
           {hasEditRights ? (
             inEditMode === field && !error ? (
               <Loader active size='tiny' inline />
+            ) : this.state.editMode ? (
+              <Icon name='save' onClick={this.handleClick} color='blue' />
             ) : (
-              <Icon
-                name={this.state.editMode ? 'save' : 'pencil'}
-                onClick={this.handleClick}
-              />
+              <Dropdown
+                icon={{ name: 'ellipsis vertical', color: 'grey' }}
+                pointing='top right'
+              >
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={this.handleClick}>
+                    <Icon name='pencil' />
+                    Edit
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
             )
           ) : (
             false

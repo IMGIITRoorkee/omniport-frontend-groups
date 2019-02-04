@@ -54,7 +54,10 @@ class GroupPostCard extends React.Component {
               </div>
               <div>
                 {activeGroup.hasEditRights && (
-                  <Dropdown icon='ellipsis vertical' pointing='top right'>
+                  <Dropdown
+                    icon={{ name: 'ellipsis vertical', color: 'grey' }}
+                    pointing='top right'
+                  >
                     <Dropdown.Menu>
                       <Dropdown.Item>
                         <Modal
@@ -68,6 +71,7 @@ class GroupPostCard extends React.Component {
                           onClose={this.handleClose}
                           size='small'
                           dimmer='blurring'
+                          closeIcon
                         >
                           <Modal.Header>
                             <Icon name='warning sign' color='red' />

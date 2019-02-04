@@ -7,7 +7,6 @@ import { getTheme, getThemeObject } from 'formula_one'
 import PurposeCard from './purpose-card'
 import LocationCard from './location-card'
 import GroupPostList from './group-post-list'
-import AddMember from './add-member'
 import { urlGroupTeam } from '../urls'
 
 import '../css/group.css'
@@ -34,7 +33,6 @@ class GroupAbout extends React.Component {
               </span>
             </Card.Content>
           </Card>
-          {activeGroup.hasAdminRights && <AddMember />}
         </Grid.Column>
         <GroupPostList />
       </Grid>

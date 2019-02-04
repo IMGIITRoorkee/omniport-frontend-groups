@@ -250,7 +250,7 @@ class EditBranding extends React.Component {
         .child.children.site.choices
       : []
     return (
-      <Modal trigger={<Icon fitted name='pencil' />} size='small'>
+      <Modal trigger={<Icon fitted name='pencil' />} size='small' closeIcon>
         <Modal.Header>Edit group branding</Modal.Header>
         <Modal.Content>
           <Header dividing>Profile</Header>
@@ -484,7 +484,11 @@ class EditBranding extends React.Component {
                   onChange={this.handleNewSocialChange}
                   value={this.state.newLinkUrl}
                 />
-                <Icon name='save' onClick={this.handleAddSocialLink} />
+                <Icon
+                  name='save'
+                  onClick={this.handleAddSocialLink}
+                  color='blue'
+                />
               </Form.Field>
             </Form.Field>
           </Form>

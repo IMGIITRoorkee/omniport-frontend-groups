@@ -181,7 +181,6 @@ class GroupAddPost extends React.Component {
               </Dimmer.Dimmable>
               <Form.Field>
                 <Button
-                  basic
                   content='Post'
                   icon='send'
                   color={getTheme()}

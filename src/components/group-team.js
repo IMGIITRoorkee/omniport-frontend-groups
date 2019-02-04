@@ -1,13 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { Container, Menu, Header } from 'semantic-ui-react'
+import { Container, Menu } from 'semantic-ui-react'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import GroupTeamList from './group-team-list'
 import { setActiveGroupWithTeam } from '../actions/index'
-import { urlGroupDetailView } from '../urls'
-
-import '../css/group-team.css'
+import { urlGroupDetailView, urlBaseView } from '../urls'
 
 class GroupTeam extends React.Component {
   constructor (props) {
@@ -47,17 +45,21 @@ class GroupTeam extends React.Component {
     return (
       <div style={{ height: '100%' }}>
         <Container>
-          <div styleName='group-team-container'>
-            <Link
-              to={urlGroupDetailView(
-                activeGroup.data ? activeGroup.data.slug : ''
-              )}
-            >
-              <Header as='h3'>
-                {activeGroup.data && activeGroup.data.name}
-              </Header>
-            </Link>
-            <Header as='h4'>Team members</Header>
+          <div>
+            <CustomBreadcrumb
+              list={[
+                { name: 'Groups', link: urlBaseView() },
+                {
+                  name: activeGroup.data && activeGroup.data.name,
+                  link: urlGroupDetailView(
+                    activeGroup.data ? activeGroup.data.slug : ''
+                  )
+                },
+                {
+                  name: activeGroup.data && 'Team members'
+                }
+              ]}
+            />
             <Menu tabular>
               <Menu.Item
                 name='current'

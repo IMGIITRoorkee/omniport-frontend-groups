@@ -2,9 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Container } from 'semantic-ui-react'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import GroupBranding from './group-branding'
 import GroupAbout from './group-about'
 import { setActiveGroup } from '../actions'
+import { urlBaseView } from '../urls'
 import '../css/group.css'
 
 class GroupDetail extends React.Component {
@@ -17,9 +19,15 @@ class GroupDetail extends React.Component {
   render () {
     const { activeGroup } = this.props
     return (
-      <div styleName='group-container'>
+      <div>
         {activeGroup.isLoaded && (
           <Container>
+            <CustomBreadcrumb
+              list={[
+                { name: 'Groups', link: urlBaseView() },
+                { name: activeGroup.data.name }
+              ]}
+            />
             <GroupBranding />
             <GroupAbout slug={this.props.match.params.slug} />
           </Container>

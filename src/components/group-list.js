@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Container } from 'semantic-ui-react'
 
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { Tiles } from 'formula_one'
 import { setGroupList } from '../actions'
 import { urlGroupDetailView } from '../urls'
@@ -12,7 +14,8 @@ class GroupList extends React.PureComponent {
   render () {
     const { groupList } = this.props
     return (
-      <React.Fragment>
+      <Container>
+        <CustomBreadcrumb list={[{ name: 'Groups' }]} />
         <Tiles
           tiles={
             groupList.isLoaded
@@ -28,7 +31,7 @@ class GroupList extends React.PureComponent {
               : []
           }
         />
-      </React.Fragment>
+      </Container>
     )
   }
 }
