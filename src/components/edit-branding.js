@@ -47,7 +47,7 @@ class EditBranding extends React.Component {
       socialInfo: data.socialInformation[0]
         ? data.socialInformation[0].links
         : [],
-      yearOfInception: data.yearOfInception,
+      yearOfInception: data.yearOfInception || '',
       newLinkUrl: '',
       newLinkSite: '',
       success: '',
@@ -160,7 +160,6 @@ class EditBranding extends React.Component {
   }
 
   errUpdateLinkCallback = (err, id) => {
-    console.log(id, 'iiidid')
     this.setState({
       error: `link${id}`,
       success: '',
@@ -315,7 +314,6 @@ class EditBranding extends React.Component {
               loading={activeGroup.inEditMode === 'profileBranding'}
               content='Update'
               icon='check'
-              basic
             />
           </Form>
         </Modal.Content>
@@ -380,7 +378,6 @@ class EditBranding extends React.Component {
             <Button
               color={getTheme()}
               floated='right'
-              basic
               icon='check'
               content='Update'
               onClick={this.handleUpdateContact}
@@ -484,11 +481,7 @@ class EditBranding extends React.Component {
                   onChange={this.handleNewSocialChange}
                   value={this.state.newLinkUrl}
                 />
-                <Icon
-                  name='save'
-                  onClick={this.handleAddSocialLink}
-                  color='blue'
-                />
+                <Icon name='save' onClick={this.handleAddSocialLink} />
               </Form.Field>
             </Form.Field>
           </Form>

@@ -122,121 +122,116 @@ class AddMember extends React.Component {
     )
     return (
       <React.Fragment>
-        <Segment attached='top' color={getTheme()}>
-          <Header as='h3'>Add members</Header>
-        </Segment>
-        <Segment attached='bottom'>
-          <Form>
-            {error && (
-              <Message
-                negative
-                header='Error'
-                list={Object.keys(message)
-                  .map(cat => {
-                    return message[cat].map(x => {
-                      return `${capitalize(startCase(cat))}: ${x}`
-                    })
+        <Form>
+          {error && (
+            <Message
+              negative
+              header='Error'
+              list={Object.keys(message)
+                .map(cat => {
+                  return message[cat].map(x => {
+                    return `${capitalize(startCase(cat))}: ${x}`
                   })
-                  .map(x => {
-                    return x[0]
-                  })}
-              />
-            )}
-            {success && (
-              <Message
-                positive
-                header='Success'
-                content={`Successfuly added ${message.person.fullName}`}
-              />
-            )}
-            <Form.Field required error={error && errorExist(message, 'person')}>
-              <label>Select</label>
-              <Search
-                loading={isLoading}
-                onSearchChange={this.handleSearchChange}
-                onResultSelect={this.handleResultSelect}
-                results={results}
-                value={value}
-                fluid
-                input={{ fluid: true }}
-                resultRenderer={resultRenderer}
-                placeholder='Add members by their name or contact information'
-              />
-            </Form.Field>
-            <Form.Field error={error && errorExist(message, 'designation')}>
-              <label>Designation</label>
-              <Form.Input
-                name='designation'
-                placeholder='Designation'
-                value={this.state.designation}
-                onChange={this.handleChange}
-                fluid
-              />
-            </Form.Field>
-            <Form.Field error={error && errorExist(message, 'post')}>
-              <label>Post</label>
-              <Form.Input
-                name='post'
-                placeholder='Post'
-                value={this.state.post}
-                onChange={this.handleChange}
-                fluid
-              />
-            </Form.Field>
-            <Form.Field
-              required
-              error={error && errorExist(message, 'startDate')}
-            >
-              <label>Joining date</label>
-              <DateInput
-                dateFormat='YYYY-MM-DD'
-                fluid
-                placeholder='YYYY-MM-DD'
-                name='startDate'
-                value={this.state.startDate}
-                iconPosition='left'
-                onChange={this.handleDateChange}
-              />
-            </Form.Field>
-            <Form.Field error={error && errorExist(message, 'endDate')}>
-              <label>End date</label>
-              <DateInput
-                dateFormat='YYYY-MM-DD'
-                fluid
-                placeholder='YYYY-MM-DD'
-                name='endDate'
-                onChange={this.handleDateChange}
-                value={this.state.endDate}
-                iconPosition='left'
-              />
-            </Form.Field>
-            <Form.Field error={error && errorExist(message, 'hasEditRights')}>
-              <Checkbox
-                onChange={this.handleCheckChange}
-                checked={this.state.hasEditRights}
-                name='hasEditRights'
-                label='Has edit rights'
-              />
-            </Form.Field>
-            <Form.Field error={error && errorExist(message, 'hasAdminRights')}>
-              <Checkbox
-                onChange={this.handleCheckChange}
-                checked={this.state.hasAdminRights}
-                name='hasAdminRights'
-                label='Has admin rights'
-              />
-            </Form.Field>
-            <Form.Field>
-              <Button
-                primary
-                icon='user add'
-                content='Add'
-                onClick={this.handleAdd}
-                loading={groupTeam.changing}
-              />
-            </Form.Field>
-          </Form>
-        </Segment>
+                })
+                .map(x => {
+                  return x[0]
+                })}
+            />
+          )}
+          {success && (
+            <Message
+              positive
+              header='Success'
+              content={`Successfuly added ${message.person.fullName}`}
+            />
+          )}
+          <Form.Field required error={error && errorExist(message, 'person')}>
+            <label>Select</label>
+            <Search
+              loading={isLoading}
+              onSearchChange={this.handleSearchChange}
+              onResultSelect={this.handleResultSelect}
+              results={results}
+              value={value}
+              fluid
+              input={{ fluid: true }}
+              resultRenderer={resultRenderer}
+              placeholder='Add members by their name or contact information'
+            />
+          </Form.Field>
+          <Form.Field error={error && errorExist(message, 'designation')}>
+            <label>Designation</label>
+            <Form.Input
+              name='designation'
+              placeholder='Designation'
+              value={this.state.designation}
+              onChange={this.handleChange}
+              fluid
+            />
+          </Form.Field>
+          <Form.Field error={error && errorExist(message, 'post')}>
+            <label>Post</label>
+            <Form.Input
+              name='post'
+              placeholder='Post'
+              value={this.state.post}
+              onChange={this.handleChange}
+              fluid
+            />
+          </Form.Field>
+          <Form.Field
+            required
+            error={error && errorExist(message, 'startDate')}
+          >
+            <label>Joining date</label>
+            <DateInput
+              dateFormat='YYYY-MM-DD'
+              fluid
+              placeholder='YYYY-MM-DD'
+              name='startDate'
+              value={this.state.startDate}
+              iconPosition='left'
+              onChange={this.handleDateChange}
+            />
+          </Form.Field>
+          <Form.Field error={error && errorExist(message, 'endDate')}>
+            <label>End date</label>
+            <DateInput
+              dateFormat='YYYY-MM-DD'
+              fluid
+              placeholder='YYYY-MM-DD'
+              name='endDate'
+              onChange={this.handleDateChange}
+              value={this.state.endDate}
+              iconPosition='left'
+            />
+          </Form.Field>
+          <Form.Field error={error && errorExist(message, 'hasEditRights')}>
+            <Checkbox
+              onChange={this.handleCheckChange}
+              checked={this.state.hasEditRights}
+              name='hasEditRights'
+              label='Has edit rights'
+            />
+          </Form.Field>
+          <Form.Field error={error && errorExist(message, 'hasAdminRights')}>
+            <Checkbox
+              onChange={this.handleCheckChange}
+              checked={this.state.hasAdminRights}
+              name='hasAdminRights'
+              label='Has admin rights'
+            />
+          </Form.Field>
+          <Form.Field>
+            <Button
+              primary
+              icon='user add'
+              content='Add'
+              onClick={this.handleAdd}
+              loading={groupTeam.changing}
+            />
+          </Form.Field>
+        </Form>
       </React.Fragment>
     )
   }

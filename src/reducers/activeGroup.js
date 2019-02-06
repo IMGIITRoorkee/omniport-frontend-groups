@@ -11,6 +11,7 @@ const activeGroup = (state = initialState, action) => {
     case 'SET_ACTIVE_GROUP_CHANGED':
       return {
         ...action.payload,
+        inEditMode: '',
         hasAdminRights: state.hasAdminRights,
         hasEditRights: state.hasEditRights
       }
@@ -31,12 +32,27 @@ const activeGroup = (state = initialState, action) => {
         hasEditRights: state.hasEditRights
       }
     case 'SET_ACTIVE_GROUP_ADD_SOCIAL':
+      if (!state.data.socialInformation[0]) {
+        return {
+          data: {
+            ...state.data,
+            socialInformation: [
+              {
+                links: [action.payload]
+              }
+            ]
+          },
+          inEditMode: '',
+          isLoaded: true,
+          hasAdminRights: state.hasAdminRights,
+          hasEditRights: state.hasEditRights
+        }
+      }
       return {
         data: {
           ...state.data,
           socialInformation: [
             {
-              ...state.data.socialInformation[0],
               links: [...state.data.socialInformation[0].links, action.payload]
             }
           ]

@@ -96,9 +96,11 @@ class PurposeCard extends React.Component {
                 pointing='top right'
               >
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={this.handleClick}>
-                    <Icon name='pencil' />
-                    Edit
+                  <Dropdown.Item>
+                    <span onClick={this.handleClick}>
+                      <Icon name='pencil' />
+                      Edit
+                    </span>
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

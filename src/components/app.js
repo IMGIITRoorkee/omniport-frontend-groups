@@ -1,11 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Route, Redirect, Switch } from 'react-router-dom'
-import { isMobile, isBrowser } from 'react-device-detect'
 import { Scrollbars } from 'react-custom-scrollbars'
 
-import Sidebar from 'core/common/src/components/primary-sidebar'
-import { AppHeader, AppFooter, AppMain } from 'formula_one'
 import GroupList from './group-list'
 import GroupDetail from './group-detail'
 import GroupTeam from './group-team'
@@ -45,47 +42,15 @@ class App extends React.PureComponent {
   }
   render () {
     const { match } = this.props
-    const creators = [
-      {
-        name: 'Dhruv Bhanushali',
-        role: 'Backend developer',
-        link: 'https://dhruvkb.github.io/'
-      },
-      {
-        name: 'Praduman Goyal',
-        role: 'Frontend developer',
-        link: 'https://pradumangoyal.github.io'
-      }
-    ]
     return (
-      <React.Fragment>
-        <div styleName='app'>
-          <AppHeader userDropdown />
-          {isMobile && <Sidebar />}
-          <AppMain>
-            <div styleName='main.app-main'>
-              {isBrowser && <Sidebar />}
-              <Scrollbars autoHide onScrollFrame={this.handleScroll}>
-                <Switch>
-                  <Route exact path={`${match.path}`} component={GroupList} />
-                  <Route
-                    exact
-                    path={`${match.path}:slug`}
-                    component={GroupDetail}
-                  />
-                  <Route
-                    exact
-                    path={`${match.path}:slug/team`}
-                    component={GroupTeam}
-                  />
-                  <Route render={props => <Redirect to='/404' />} />
-                </Switch>
-              </Scrollbars>
-            </div>
-          </AppMain>
-          <AppFooter creators={creators} />
-        </div>
-      </React.Fragment>
+      <Scrollbars autoHide onScrollFrame={this.handleScroll}>
+        <Switch>
+          <Route exact path={`${match.path}`} component={GroupList} />
+          <Route exact path={`${match.path}:slug`} component={GroupDetail} />
+          <Route exact path={`${match.path}:slug/team`} component={GroupTeam} />
+          <Route render={props => <Redirect to='/404' />} />
+        </Switch>
+      </Scrollbars>
     )
   }
 }

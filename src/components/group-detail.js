@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Container } from 'semantic-ui-react'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
+import EmptyGroupDetail from './empty-group-detail'
 import GroupBranding from './group-branding'
 import GroupAbout from './group-about'
 import { setActiveGroup } from '../actions'
@@ -20,7 +21,7 @@ class GroupDetail extends React.Component {
     const { activeGroup } = this.props
     return (
       <div>
-        {activeGroup.isLoaded && (
+        {activeGroup.isLoaded ? (
           <Container>
             <CustomBreadcrumb
               list={[
@@ -31,6 +32,8 @@ class GroupDetail extends React.Component {
             <GroupBranding />
             <GroupAbout slug={this.props.match.params.slug} />
           </Container>
+        ) : (
+          <EmptyGroupDetail />
         )}
       </div>
     )

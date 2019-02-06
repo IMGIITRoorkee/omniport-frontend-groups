@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container } from 'semantic-ui-react'
+import { Container, Grid, Segment, Placeholder } from 'semantic-ui-react'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import { Tiles } from 'formula_one'
@@ -16,21 +16,36 @@ class GroupList extends React.PureComponent {
     return (
       <Container>
         <CustomBreadcrumb list={[{ name: 'Groups' }]} />
-        <Tiles
-          tiles={
-            groupList.isLoaded
-              ? groupList.data.map(group => {
-                return {
-                  name: group.name,
-                  desc: <span>{group.shortDescription}</span>,
-                  link: urlGroupDetailView(group.slug),
-                  iconName: 'users',
-                  imageUrl: group.logo
-                }
-              })
-              : []
-          }
-        />
+        {groupList.isLoaded ? (
+          <Tiles
+            tiles={groupList.data.map(group => {
+              return {
+                name: group.name,
+                desc: <span>{group.shortDescription}</span>,
+                link: urlGroupDetailView(group.slug),
+                iconName: 'users',
+                imageUrl: group.logo
+              }
+            })}
+          />
+        ) : (
+          <Grid columns={3} stackable doubling>
+            {[...Array(6)].map((item, index) => {
+              return (
+                <Grid.Column key={index}>
+                  <Segment>
+                    <Placeholder>
+                      <Placeholder.Header image square>
+                        <Placeholder.Line />
+                        <Placeholder.Line />
+                      </Placeholder.Header>
+                    </Placeholder>
+                  </Segment>
+                </Grid.Column>
+              )
+            })}
+          </Grid>
+        )}
       </Container>
     )
   }

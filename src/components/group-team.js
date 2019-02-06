@@ -4,6 +4,7 @@ import { Container, Menu } from 'semantic-ui-react'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import GroupTeamList from './group-team-list'
+import EmptyGroupTeam from './empty-group-team'
 import { setActiveGroupWithTeam } from '../actions/index'
 import { urlGroupDetailView, urlBaseView } from '../urls'
 
@@ -46,33 +47,39 @@ class GroupTeam extends React.Component {
       <div style={{ height: '100%' }}>
         <Container>
           <div>
-            <CustomBreadcrumb
-              list={[
-                { name: 'Groups', link: urlBaseView() },
-                {
-                  name: activeGroup.data && activeGroup.data.name,
-                  link: urlGroupDetailView(
-                    activeGroup.data ? activeGroup.data.slug : ''
-                  )
-                },
-                {
-                  name: activeGroup.data && 'Team members'
-                }
-              ]}
-            />
-            <Menu tabular>
-              <Menu.Item
-                name='current'
-                active={activeItem === 'current'}
-                onClick={this.handleClick}
-              />
-              <Menu.Item
-                name='alumni'
-                active={activeItem === 'alumni'}
-                onClick={this.handleClick}
-              />
-            </Menu>
-            <GroupTeamList />
+            {activeGroup.data ? (
+              <React.Fragment>
+                <CustomBreadcrumb
+                  list={[
+                    { name: 'Groups', link: urlBaseView() },
+                    {
+                      name: activeGroup.data.name,
+                      link: urlGroupDetailView(
+                        activeGroup.data ? activeGroup.data.slug : ''
+                      )
+                    },
+                    {
+                      name: 'Team members'
+                    }
+                  ]}
+                />
+                <Menu tabular>
+                  <Menu.Item
+                    name='current'
+                    active={activeItem === 'current'}
+                    onClick={this.handleClick}
+                  />
+                  <Menu.Item
+                    name='alumni'
+                    active={activeItem === 'alumni'}
+                    onClick={this.handleClick}
+                  />
+                </Menu>
+                <GroupTeamList />
+              </React.Fragment>
+            ) : (
+              <EmptyGroupTeam />
+            )}
           </div>
         </Container>
       </div>

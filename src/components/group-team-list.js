@@ -4,19 +4,20 @@ import {
   Card,
   Icon,
   Segment,
-  Loader,
   Modal,
   Form,
   Input,
   Checkbox,
   Button,
   Message,
-  Dropdown
+  Dropdown,
+  Placeholder
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import { capitalize, startCase } from 'lodash'
 
 import { TileCard, UserCard } from 'formula_one'
+import EmptyGroupTeamList from './empty-group-team-list'
 import AddMember from './add-member'
 import { errorExist } from '../utils'
 import { changeTeamMember, removeMember } from '../actions'
@@ -75,7 +76,9 @@ class GroupTeamList extends React.Component {
       this.errCallback
     )
   }
-  handleClose = () => this.setState({ modalOpen: '', toDelete: {} })
+  handleClose = () => {
+    this.setState({ modalOpen: '', toDelete: {} })
+  }
   handleEditModalClose = () => {
     this.setState({ editModalOpen: '' })
   }
@@ -96,7 +99,7 @@ class GroupTeamList extends React.Component {
   }
   successCallback = res => {
     this.setState({
-      editModalOpen: false,
+      editModalOpen: '',
       success: true,
       error: false,
       message: res.data
@@ -114,261 +117,256 @@ class GroupTeamList extends React.Component {
     const { activeGroup, groupTeam } = this.props
     const { hasAdminRights } = activeGroup
     const { team } = groupTeam
-    return (
-      activeGroup.isLoaded && (
-        <React.Fragment>
-          <Card.Group itemsPerRow={3} stackable doubling>
-            {activeGroup.hasAdminRights && (
-              <Modal
-                trigger={
-                  <TileCard
-                    name='Add'
-                    iconName='add'
-                    desc={<span>Add a new member</span>}
-                  />
-                }
-                closeIcon
-              >
-                <Modal.Header>Add member</Modal.Header>
-                <Modal.Content>
-                  <AddMember />
-                </Modal.Content>
-              </Modal>
-            )}
-            {team.results &&
-              team.results.map(member => {
-                return (
-                  <UserCard
-                    key={member.id}
-                    name={member.person.fullName}
-                    roles={[member.designation, member.post]}
-                    image={member.person.displayPicture}
-                    right={
-                      hasAdminRights && (
-                        <React.Fragment>
-                          <Dropdown
-                            icon={{ name: 'ellipsis vertical', color: 'grey' }}
-                            pointing='top right'
-                          >
-                            <Dropdown.Menu>
-                              <Dropdown.Item
-                                onClick={() => {
-                                  this.handleEdit(member)
-                                }}
+    return activeGroup.isLoaded && groupTeam.isLoaded ? (
+      <React.Fragment>
+        <Card.Group itemsPerRow={3} stackable doubling>
+          {activeGroup.hasAdminRights && (
+            <Modal
+              trigger={
+                <TileCard
+                  name='Add'
+                  iconName='add'
+                  desc={<span>Add a new member</span>}
+                />
+              }
+              size='tiny'
+              closeIcon
+            >
+              <Modal.Header>Add member</Modal.Header>
+              <Modal.Content>
+                <AddMember />
+              </Modal.Content>
+            </Modal>
+          )}
+          {team.results &&
+            team.results.map(member => {
+              return (
+                <UserCard
+                  key={member.id}
+                  name={member.person.fullName}
+                  roles={[member.designation, member.post]}
+                  image={member.person.displayPicture}
+                  right={
+                    hasAdminRights && (
+                      <React.Fragment>
+                        <Dropdown
+                          icon={{ name: 'ellipsis vertical', color: 'grey' }}
+                          pointing='top right'
+                        >
+                          <Dropdown.Menu>
+                            <Dropdown.Item>
+                              <Modal
+                                open={this.state.editModalOpen === member.id}
+                                trigger={
+                                  <span
+                                    onClick={() => {
+                                      this.handleEdit(member)
+                                    }}
+                                  >
+                                    <Icon name='pencil' />
+                                    Edit
+                                  </span>
+                                }
+                                onClose={this.handleEditModalClose}
+                                size='tiny'
+                                closeIcon
                               >
-                                <Modal
-                                  open={this.state.editModalOpen === member.id}
-                                  trigger={
-                                    <React.Fragment>
-                                      <Icon name='pencil' />
-                                      Edit
-                                    </React.Fragment>
-                                  }
-                                  onClose={this.handleEditModalClose}
-                                  size='tiny'
-                                  closeIcon
-                                >
-                                  <Modal.Header>Edit member</Modal.Header>
-                                  <Modal.Content>
-                                    <UserCard
-                                      name={member.person.fullName}
-                                      roles={[member.designation, member.post]}
-                                      image={member.person.displayPicture}
-                                    />
-                                    <Form>
-                                      {error && (
-                                        <Message
-                                          negative
-                                          header='Error'
-                                          list={Object.keys(message)
-                                            .map(cat => {
-                                              return message[cat].map(x => {
-                                                return `${capitalize(
-                                                  startCase(cat)
-                                                )}: ${x}`
-                                              })
+                                <Modal.Header>Edit member</Modal.Header>
+                                <Modal.Content>
+                                  <UserCard
+                                    name={member.person.fullName}
+                                    roles={[member.designation, member.post]}
+                                    image={member.person.displayPicture}
+                                  />
+                                  <Form>
+                                    {error && (
+                                      <Message
+                                        negative
+                                        header='Error'
+                                        list={Object.keys(message)
+                                          .map(cat => {
+                                            return message[cat].map(x => {
+                                              return `${capitalize(
+                                                startCase(cat)
+                                              )}: ${x}`
                                             })
-                                            .map(x => {
-                                              return x[0]
-                                            })}
-                                        />
-                                      )}
-                                      <Form.Field
-                                        error={
-                                          error &&
-                                          errorExist(message, 'designation')
+                                          })
+                                          .map(x => {
+                                            return x[0]
+                                          })}
+                                      />
+                                    )}
+                                    <Form.Field
+                                      error={
+                                        error &&
+                                        errorExist(message, 'designation')
+                                      }
+                                    >
+                                      <label>Designation</label>
+                                      <Input
+                                        name='designation'
+                                        value={this.state.designation}
+                                        onChange={this.handleChange}
+                                      />
+                                    </Form.Field>
+                                    <Form.Field
+                                      error={
+                                        error && errorExist(message, 'post')
+                                      }
+                                    >
+                                      <label>Post</label>
+                                      <Input
+                                        name='post'
+                                        value={this.state.post}
+                                        onChange={this.handleChange}
+                                      />
+                                    </Form.Field>
+                                    <Form.Field
+                                      error={
+                                        error &&
+                                        errorExist(message, 'startDate')
+                                      }
+                                      required
+                                    >
+                                      <label>Joining date</label>
+                                      <DateInput
+                                        dateFormat='YYYY-MM-DD'
+                                        fluid
+                                        placeholder='YYYY-MM-DD'
+                                        name='joiningDate'
+                                        value={this.state.joiningDate}
+                                        iconPosition='left'
+                                        onChange={this.handleDateChange}
+                                      />
+                                    </Form.Field>
+                                    <Form.Field
+                                      error={
+                                        error && errorExist(message, 'endDate')
+                                      }
+                                    >
+                                      <label>End date</label>
+                                      <DateInput
+                                        dateFormat='YYYY-MM-DD'
+                                        fluid
+                                        placeholder='YYYY-MM-DD'
+                                        name='endDate'
+                                        onChange={this.handleDateChange}
+                                        value={this.state.endDate}
+                                        iconPosition='left'
+                                      />
+                                    </Form.Field>
+                                    <Form.Field
+                                      error={
+                                        error &&
+                                        errorExist(message, 'hasEditRights')
+                                      }
+                                    >
+                                      <Checkbox
+                                        onChange={this.handleCheckChange}
+                                        name='hasEditRights'
+                                        label='Has edit rights'
+                                        defaultChecked={
+                                          this.state.hasEditRights
                                         }
-                                      >
-                                        <label>Designation</label>
-                                        <Input
-                                          name='designation'
-                                          value={this.state.designation}
-                                          onChange={this.handleChange}
-                                        />
-                                      </Form.Field>
-                                      <Form.Field
-                                        error={
-                                          error && errorExist(message, 'post')
+                                      />
+                                    </Form.Field>
+                                    <Form.Field
+                                      error={
+                                        error &&
+                                        errorExist(message, 'hasAdminRights')
+                                      }
+                                    >
+                                      <Checkbox
+                                        onChange={this.handleCheckChange}
+                                        name='hasAdminRights'
+                                        label='Has admin rights'
+                                        defaultChecked={
+                                          this.state.hasAdminRights
                                         }
-                                      >
-                                        <label>Post</label>
-                                        <Input
-                                          name='post'
-                                          value={this.state.post}
-                                          onChange={this.handleChange}
-                                        />
-                                      </Form.Field>
-                                      <Form.Field
-                                        error={
-                                          error &&
-                                          errorExist(message, 'startDate')
-                                        }
-                                        required
-                                      >
-                                        <label>Joining date</label>
-                                        <DateInput
-                                          dateFormat='YYYY-MM-DD'
-                                          fluid
-                                          placeholder='YYYY-MM-DD'
-                                          name='joiningDate'
-                                          value={this.state.joiningDate}
-                                          iconPosition='left'
-                                          onChange={this.handleDateChange}
-                                        />
-                                      </Form.Field>
-                                      <Form.Field
-                                        error={
-                                          error &&
-                                          errorExist(message, 'endDate')
-                                        }
-                                      >
-                                        <label>End date</label>
-                                        <DateInput
-                                          dateFormat='YYYY-MM-DD'
-                                          fluid
-                                          placeholder='YYYY-MM-DD'
-                                          name='endDate'
-                                          onChange={this.handleDateChange}
-                                          value={this.state.endDate}
-                                          iconPosition='left'
-                                        />
-                                      </Form.Field>
-                                      <Form.Field
-                                        error={
-                                          error &&
-                                          errorExist(message, 'hasEditRights')
-                                        }
-                                      >
-                                        <Checkbox
-                                          onChange={this.handleCheckChange}
-                                          name='hasEditRights'
-                                          label='Has edit rights'
-                                          defaultChecked={
-                                            this.state.hasEditRights
-                                          }
-                                        />
-                                      </Form.Field>
-                                      <Form.Field
-                                        error={
-                                          error &&
-                                          errorExist(message, 'hasAdminRights')
-                                        }
-                                      >
-                                        <Checkbox
-                                          onChange={this.handleCheckChange}
-                                          name='hasAdminRights'
-                                          label='Has admin rights'
-                                          defaultChecked={
-                                            this.state.hasAdminRights
-                                          }
-                                        />
-                                      </Form.Field>
-                                    </Form>
-                                  </Modal.Content>
-                                  <Modal.Actions>
-                                    <Button
-                                      icon='check'
-                                      primary
-                                      content='Update'
-                                      onClick={this.handleUpdate}
-                                    />
-                                  </Modal.Actions>
-                                </Modal>
-                              </Dropdown.Item>
-                              <Dropdown.Item
-                                onClick={() => this.handleRemove(member)}
+                                      />
+                                    </Form.Field>
+                                  </Form>
+                                </Modal.Content>
+                                <Modal.Actions>
+                                  <Button
+                                    icon='check'
+                                    primary
+                                    content='Update'
+                                    onClick={this.handleUpdate}
+                                  />
+                                </Modal.Actions>
+                              </Modal>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                              <Modal
+                                trigger={
+                                  <span
+                                    onClick={() => this.handleRemove(member)}
+                                  >
+                                    <Icon name='close' />
+                                    Delete
+                                  </span>
+                                }
+                                open={this.state.modalOpen === member.id}
+                                onClose={this.handleClose}
+                                size='small'
+                                dimmer='blurring'
+                                closeIcon
                               >
-                                <Modal
-                                  trigger={
-                                    <React.Fragment>
-                                      <Icon name='close' />
-                                      Delete
-                                    </React.Fragment>
-                                  }
-                                  open={this.state.modalOpen === member.id}
-                                  onClose={this.handleClose}
-                                  size='small'
-                                  dimmer='blurring'
-                                  closeIcon
-                                >
-                                  <Modal.Header>
-                                    <Icon name='warning sign' color='red' />
-                                    Confirm irreversible deletion
-                                  </Modal.Header>
-                                  <Modal.Content>
-                                    Are you sure you want to remove{' '}
-                                    <strong>
-                                      {this.state.toDelete.person &&
-                                        this.state.toDelete.person.fullName}
-                                    </strong>{' '}
-                                    from members of{' '}
-                                    <strong>{activeGroup.data.name}</strong>?
-                                    This action <strong>cannot</strong> be
-                                    undone.
-                                  </Modal.Content>
-                                  <Modal.Actions>
-                                    <Button
-                                      onClick={this.handleClose}
-                                      icon='left arrow'
-                                      content='Keep'
-                                      basic
-                                    />
-                                    <Button
-                                      icon='close'
-                                      content="Delete, I'm sure"
-                                      negative
-                                      onClick={this.handleDelete}
-                                    />
-                                  </Modal.Actions>
-                                </Modal>
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </React.Fragment>
-                      )
-                    }
-                  />
-                )
-              })}
-          </Card.Group>
-          {!groupTeam.isLoaded && (
-            <Segment basic>
-              <Loader active />
-            </Segment>
-          )}
-          {groupTeam.isLoaded && !team.next ? (
-            <Segment basic textAlign='center'>
-              <Icon name='frown outline' />
-              No more members available. You have scrolled enough for today.
-            </Segment>
-          ) : (
-            <Segment basic textAlign='center'>
-              <Icon name='sort' />
-              Scroll for more.
-            </Segment>
-          )}
-        </React.Fragment>
-      )
+                                <Modal.Header>
+                                  <Icon name='warning sign' color='red' />
+                                  Confirm irreversible deletion
+                                </Modal.Header>
+                                <Modal.Content>
+                                  Are you sure you want to remove{' '}
+                                  <strong>
+                                    {this.state.toDelete.person &&
+                                      this.state.toDelete.person.fullName}
+                                  </strong>{' '}
+                                  from members of{' '}
+                                  <strong>{activeGroup.data.name}</strong>? This
+                                  action <strong>cannot</strong> be undone.
+                                </Modal.Content>
+                                <Modal.Actions>
+                                  <Button
+                                    onClick={this.handleClose}
+                                    icon='left arrow'
+                                    content='Keep'
+                                    basic
+                                  />
+                                  <Button
+                                    icon='close'
+                                    content="Delete, I'm sure"
+                                    negative
+                                    onClick={this.handleDelete}
+                                  />
+                                </Modal.Actions>
+                              </Modal>
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </React.Fragment>
+                    )
+                  }
+                />
+              )
+            })}
+        </Card.Group>
+        {!groupTeam.isLoaded && <EmptyGroupTeamList />}
+        {groupTeam.isLoaded && !team.next ? (
+          <Segment basic textAlign='center'>
+            <Icon name='frown outline' />
+            No more members available. You have scrolled enough for today.
+          </Segment>
+        ) : (
+          <Segment basic textAlign='center'>
+            <Icon name='sort' />
+            Scroll for more.
+          </Segment>
+        )}
+      </React.Fragment>
+    ) : (
+      <EmptyGroupTeamList />
     )
   }
 }
