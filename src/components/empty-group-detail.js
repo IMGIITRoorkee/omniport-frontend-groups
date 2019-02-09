@@ -32,7 +32,7 @@ export default class EmptyGroupDetail extends React.Component {
             </Placeholder>
           </Card.Content>
           <div styleName='blocks.group-profile'>
-            <Placeholder style={{ height: '10em', minWidth: '10em' }}>
+            <Placeholder style={{ height: '8em', minWidth: '8em' }}>
               <Placeholder.Image square />
             </Placeholder>
             <div styleName='blocks.branding-text-container'>

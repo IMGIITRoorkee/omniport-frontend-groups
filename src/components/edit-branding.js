@@ -8,9 +8,11 @@ import {
   Dropdown,
   Icon,
   Header,
-  Message
+  Message,
+  Select
 } from 'semantic-ui-react'
 import { YearInput } from 'semantic-ui-calendar-react'
+import { isBrowser } from 'react-device-detect'
 import { capitalize, startCase } from 'lodash'
 
 import { getTheme } from 'formula_one'
@@ -249,7 +251,12 @@ class EditBranding extends React.Component {
         .child.children.site.choices
       : []
     return (
-      <Modal trigger={<Icon fitted name='pencil' />} size='small' closeIcon>
+      <Modal
+        trigger={<Icon fitted name='pencil' link />}
+        size='small'
+        closeIcon
+        closeOnDimmerClick={false}
+      >
         <Modal.Header>Edit group branding</Modal.Header>
         <Modal.Content>
           <Header dividing>Profile</Header>
@@ -404,55 +411,112 @@ class EditBranding extends React.Component {
                   })}
               />
             )}
-            {success.includes('link') && (
-              <Message positive icon='check' header='Success' />
-            )}
             <Form.Field>
               <label>Link</label>
               {this.state.socialInfo.map(link => {
                 return (
-                  <Form.Field
-                    key={link.id}
-                    error={error.includes('link') && error === `link${link.id}`}
-                  >
-                    <Input
-                      autoComplete='off'
-                      label={
-                        <Dropdown
-                          name={link.id}
-                          basic
-                          scrolling
+                  <React.Fragment>
+                    {isBrowser ? (
+                      <Form.Field
+                        key={link.id}
+                        error={
+                          error.includes('link') && error === `link${link.id}`
+                        }
+                      >
+                        <Input
                           autoComplete='off'
-                          value={link.site}
-                          options={socialOptions.map(social => {
-                            return {
-                              key: social.value,
-                              value: social.value,
-                              text: social.displayName
+                          onChange={this.handleSocialChange}
+                          name={link.id}
+                          value={link.url}
+                          placeholder='https://example.com/path/to/profile/'
+                          action
+                        >
+                          <Select
+                            name={link.id}
+                            basic
+                            scrolling
+                            autoComplete='off'
+                            value={link.site}
+                            options={socialOptions.map(social => {
+                              return {
+                                key: social.value,
+                                value: social.value,
+                                text: social.displayName
+                              }
+                            })}
+                            disabled={!countryList.isLoaded}
+                            loading={!countryList.isLoaded}
+                            onChange={this.handleSocialSiteChange}
+                          />
+                          <input />
+                          <Button.Group basic>
+                            <Button
+                              icon='save'
+                              onClick={() => {
+                                this.handleUpdateLink(link.id)
+                              }}
+                            />
+                            <Button
+                              icon='trash'
+                              onClick={() => {
+                                this.handleDeleteLink(link.id)
+                              }}
+                            />
+                          </Button.Group>
+                        </Input>
+                      </Form.Field>
+                    ) : (
+                      <React.Fragment>
+                        <Form.Field>
+                          <Input
+                            autoComplete='off'
+                            onChange={this.handleSocialChange}
+                            label={
+                              <Dropdown
+                                name={link.id}
+                                basic
+                                scrolling
+                                autoComplete='off'
+                                value={link.site}
+                                options={socialOptions.map(social => {
+                                  return {
+                                    key: social.value,
+                                    value: social.value,
+                                    text: social.displayName
+                                  }
+                                })}
+                                disabled={!countryList.isLoaded}
+                                loading={!countryList.isLoaded}
+                                onChange={this.handleSocialSiteChange}
+                              />
                             }
-                          })}
-                          disabled={!countryList.isLoaded}
-                          loading={!countryList.isLoaded}
-                          onChange={this.handleSocialSiteChange}
-                        />
-                      }
-                      onChange={this.handleSocialChange}
-                      name={link.id}
-                      value={link.url}
-                    />
-                    <Icon
-                      name='edit'
-                      onClick={() => {
-                        this.handleUpdateLink(link.id)
-                      }}
-                    />
-                    <Icon
-                      name='trash'
-                      onClick={() => {
-                        this.handleDeleteLink(link.id)
-                      }}
-                    />
-                  </Form.Field>
+                            name={link.id}
+                            value={link.url}
+                            placeholder='https://example.com/path/to/profile/'
+                            action
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <Button.Group basic>
+                            <Button
+                              icon='save'
+                              content='Update'
+                              onClick={() => {
+                                this.handleUpdateLink(link.id)
+                              }}
+                            />
+                            <Button
+                              icon='trash'
+                              content='Remove'
+                              onClick={() => {
+                                this.handleDeleteLink(link.id)
+                              }}
+                            />
+                          </Button.Group>
+                        </Form.Field>
+                      </React.Fragment>
+                    )}
+                  </React.Fragment>
                 )
               })}
               <Form.Field error={error.includes('link') && error === 'linknew'}>
@@ -477,11 +541,18 @@ class EditBranding extends React.Component {
                       placeholder='Social site'
                     />
                   }
-                  placeholder='URL'
+                  placeholder='https://example.com/path/to/profile/'
                   onChange={this.handleNewSocialChange}
                   value={this.state.newLinkUrl}
                 />
-                <Icon name='save' onClick={this.handleAddSocialLink} />
+              </Form.Field>
+              <Form.Field>
+                <Button
+                  basic
+                  content='Add'
+                  icon='add'
+                  onClick={this.handleAddSocialLink}
+                />
               </Form.Field>
             </Form.Field>
           </Form>

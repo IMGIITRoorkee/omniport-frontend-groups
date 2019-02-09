@@ -161,7 +161,7 @@ class GroupBranding extends React.Component {
                   <Icon name='erase' bordered onClick={this.removeCover} />
                 )}
                 <label htmlFor='coverImage'>
-                  <Icon name='pencil' />
+                  <Icon name='pencil' link />
                 </label>
                 <input
                   type='file'
@@ -190,7 +190,7 @@ class GroupBranding extends React.Component {
                   circular
                 />
               ) : (
-                <DefaultDP name={data.name} size='4em' />
+                <DefaultDP name={data.name} size='5em' />
               )}
             </div>
             <Dimmer
@@ -205,7 +205,7 @@ class GroupBranding extends React.Component {
                     <Icon name='erase' bordered onClick={this.removeLogo} />
                   )}
                   <label htmlFor='logo'>
-                    <Icon name='pencil' />
+                    <Icon name='pencil' link />
                   </label>
                   <input
                     type='file'

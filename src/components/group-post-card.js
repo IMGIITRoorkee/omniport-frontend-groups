@@ -59,47 +59,45 @@ class GroupPostCard extends React.Component {
                     pointing='top right'
                   >
                     <Dropdown.Menu>
-                      <Dropdown.Item>
-                        <Modal
-                          trigger={
-                            <span onClick={this.handleOpen}>
-                              <Icon name='trash alternate outline' />
-                              Delete
-                            </span>
-                          }
-                          open={this.state.modalOpen}
-                          onClose={this.handleClose}
-                          size='small'
-                          dimmer='blurring'
-                          closeIcon
-                        >
-                          <Modal.Header>
-                            <Icon name='warning sign' color='red' />
-                            Confirm irreversible deletion
-                          </Modal.Header>
-                          <Modal.Content>
-                            Are you sure you want to remove this post?
-                          </Modal.Content>
-                          <Modal.Actions>
-                            <Button
-                              positive
-                              onClick={this.handleClose}
-                              icon='left arrow'
-                              content='Keep'
-                              basic
-                            />
-                            <Button
-                              icon='close'
-                              content="Delete, I'm sure"
-                              basic
-                              negative
-                              onClick={() => {
-                                this.props.RemovePost(post.id)
-                              }}
-                            />
-                          </Modal.Actions>
-                        </Modal>
-                      </Dropdown.Item>
+                      <Modal
+                        trigger={
+                          <Dropdown.Item onClick={this.handleOpen}>
+                            <Icon name='trash alternate outline' />
+                            Delete
+                          </Dropdown.Item>
+                        }
+                        open={this.state.modalOpen}
+                        onClose={this.handleClose}
+                        size='small'
+                        dimmer='blurring'
+                        closeIcon
+                      >
+                        <Modal.Header>
+                          <Icon name='warning sign' color='red' />
+                          Confirm irreversible deletion
+                        </Modal.Header>
+                        <Modal.Content>
+                          Are you sure you want to remove this post?
+                        </Modal.Content>
+                        <Modal.Actions>
+                          <Button
+                            positive
+                            onClick={this.handleClose}
+                            icon='left arrow'
+                            content='Keep'
+                            basic
+                          />
+                          <Button
+                            icon='close'
+                            content="Delete, I'm sure"
+                            basic
+                            negative
+                            onClick={() => {
+                              this.props.RemovePost(post.id)
+                            }}
+                          />
+                        </Modal.Actions>
+                      </Modal>
                     </Dropdown.Menu>
                   </Dropdown>
                 )}

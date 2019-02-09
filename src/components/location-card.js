@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {
-  Card,
+  Segment,
   Header,
   Icon,
   Form,
@@ -94,8 +94,12 @@ class LocationCard extends React.Component {
         .choices
       : []
     return (
-      <Card color={getTheme()} fluid>
-        <Card.Content styleName='info-card-heading-container'>
+      <React.Fragment>
+        <Segment
+          styleName='info-card-heading-container'
+          color={getTheme()}
+          attached='top'
+        >
           <div styleName='info-card-heading'>
             <Header as='h4'>{heading}</Header>
           </div>
@@ -103,18 +107,16 @@ class LocationCard extends React.Component {
             inEditMode === field && !error ? (
               <Loader active size='tiny' inline />
             ) : this.state.editMode ? (
-              <Icon name='save' onClick={this.handleClick} color='blue' />
+              <Icon name='save' onClick={this.handleClick} color='blue' link />
             ) : (
               <Dropdown
                 icon={{ name: 'ellipsis vertical', color: 'grey' }}
                 pointing='top right'
               >
                 <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <span onClick={this.handleClick}>
-                      <Icon name='pencil' />
-                      Edit
-                    </span>
+                  <Dropdown.Item onClick={this.handleClick}>
+                    <Icon name='pencil' link />
+                    Edit
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -122,8 +124,8 @@ class LocationCard extends React.Component {
           ) : (
             false
           )}
-        </Card.Content>
-        <Card.Content styleName='info-card-description-container'>
+        </Segment>
+        <Segment styleName='info-card-description-container' attached='bottom'>
           {this.state.editMode || inEditMode === field ? (
             <Dimmer.Dimmable dimmed={inEditMode === field && !error}>
               <Form>
@@ -271,8 +273,8 @@ class LocationCard extends React.Component {
           ) : (
             'None'
           )}
-        </Card.Content>
-      </Card>
+        </Segment>
+      </React.Fragment>
     )
   }
 }

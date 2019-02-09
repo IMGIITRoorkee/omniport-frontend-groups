@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Card, Icon, Grid } from 'semantic-ui-react'
+import { Card, Icon, Grid, Segment } from 'semantic-ui-react'
 
 import { getTheme, getThemeObject } from 'formula_one'
 import PurposeCard from './purpose-card'
@@ -21,18 +21,17 @@ class GroupAbout extends React.Component {
           <PurposeCard heading='Mission' field='mission' />
           <PurposeCard heading='Short description' field='shortDescription' />
           <LocationCard heading='Location' field='locationInformation' />
-          <Card color={getTheme()} fluid>
-            <Card.Content
+          <Link to={urlGroupTeam(activeGroup.data.slug)}>
+            <Segment
+              color={getTheme()}
               styleName='info-card-description-container'
-              as={Link}
-              to={urlGroupTeam(activeGroup.data.slug)}
             >
               <Icon name='user outline' color={getTheme()} />
               <span style={{ color: getThemeObject().hexCode }}>
                 View members
               </span>
-            </Card.Content>
-          </Card>
+            </Segment>
+          </Link>
         </Grid.Column>
         <GroupPostList />
       </Grid>
