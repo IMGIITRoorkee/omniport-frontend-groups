@@ -33,7 +33,8 @@ class LocationCard extends React.Component {
         data[field].length !== 0 ? data[field][0].countryDetail.code : null,
       success: false,
       error: false,
-      message: ''
+      message: '',
+      countryOptions: []
     }
   }
   handleChange = (e, { name, value }) => {
@@ -45,7 +46,18 @@ class LocationCard extends React.Component {
     const { activeGroup, field, countryList } = this.props
     const { data } = activeGroup
     if (!countryList.isLoaded) {
-      this.props.SetCountryList()
+      this.props.SetCountryList(data.slug, res => {
+        this.setState({
+          countryOptions:
+            res.actions.PUT.locationInformation.child.children.country.choices
+        })
+      })
+    } else {
+      this.setState({
+        countryOptions:
+          countryList.data.actions.PUT.locationInformation.child.children
+            .country.choices
+      })
     }
     if (this.state.editMode) {
       this.props.ChangeActiveGroupLocation(
@@ -89,10 +101,6 @@ class LocationCard extends React.Component {
     const { error, message } = this.state
     const { activeGroup, heading, field, countryList } = this.props
     const { data, inEditMode, hasEditRights } = activeGroup
-    const countryOptions = countryList.isLoaded
-      ? countryList.data.actions.POST.locationInformation.child.children.country
-        .choices
-      : []
     return (
       <React.Fragment>
         <Segment
@@ -238,7 +246,7 @@ class LocationCard extends React.Component {
                     name='countryCode'
                     search
                     autoComplete='off'
-                    options={countryOptions.map(country => {
+                    options={this.state.countryOptions.map(country => {
                       return {
                         key: country.value,
                         value: country.value,
@@ -298,8 +306,8 @@ const mapDispatchToProps = dispatch => {
         changeActiveGroupLocation(id, field, data, successCallback, errCallback)
       )
     },
-    SetCountryList: () => {
-      dispatch(setCountryList())
+    SetCountryList: (slug, successCallback) => {
+      dispatch(setCountryList(slug, successCallback))
     }
   }
 }

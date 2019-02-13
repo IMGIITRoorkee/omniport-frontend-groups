@@ -52,10 +52,10 @@ export const setGroupList = () => {
   }
 }
 
-export const setCountryList = () => {
+export const setCountryList = (slug, successCallback) => {
   return dispatch => {
     axios
-      .options(urlGroupList())
+      .options(urlGroupDescription(slug))
       .then(res => {
         dispatch({
           type: 'SET_COUNTRYLIST',
@@ -64,6 +64,7 @@ export const setCountryList = () => {
             data: res.data
           }
         })
+        successCallback(res.data)
       })
       .catch(err => {})
   }
@@ -140,7 +141,7 @@ export const changeActiveGroup = (
       .catch(err => {
         dispatch({
           type: 'SET_CHANGING',
-          payload: { isLoaded: true, inEditMode: field }
+          payload: { isLoaded: true, inEditMode: '' }
         })
         errCallback(err)
       })

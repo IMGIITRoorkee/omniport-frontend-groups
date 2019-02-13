@@ -15,7 +15,6 @@ import EditBranding from './edit-branding'
 import {
   changeActiveGroup,
   changeActiveGroupWithFile,
-  setCountryList
 } from '../actions'
 
 import inline from 'formula_one/src/css/inline.css'
@@ -30,10 +29,6 @@ class GroupBranding extends React.Component {
     }
   }
   componentDidMount () {
-    const { countryList } = this.props
-    if (!countryList.isLoaded) {
-      this.props.SetCountryList()
-    }
   }
   handleShowCover = () => this.setState({ activeCover: true })
   handleHideCover = () => this.setState({ activeCover: false })
@@ -347,9 +342,6 @@ const mapDispatchToProps = dispatch => {
           errCallback
         )
       )
-    },
-    SetCountryList: () => {
-      dispatch(setCountryList())
     }
   }
 }

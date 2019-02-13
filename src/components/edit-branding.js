@@ -54,7 +54,28 @@ class EditBranding extends React.Component {
       newLinkSite: '',
       success: '',
       error: '',
-      message: ''
+      message: '',
+      socialOptions: []
+    }
+  }
+
+  setOptions = () => {
+    const { activeGroup, countryList } = this.props
+    const { data } = activeGroup
+    if (!countryList.isLoaded) {
+      this.props.SetCountryList(data.slug, res => {
+        this.setState({
+          socialOptions:
+            res.actions.PUT.socialInformation.child.children.links.child
+              .children.site.choices
+        })
+      })
+    } else {
+      this.setState({
+        socialOptions:
+          countryList.data.actions.PUT.socialInformation.child.children.links
+            .child.children.site.choices
+      })
     }
   }
 
@@ -244,15 +265,11 @@ class EditBranding extends React.Component {
   }
 
   render () {
-    const { success, error, message } = this.state
+    const { success, error, message, socialOptions } = this.state
     const { activeGroup, countryList } = this.props
-    const socialOptions = countryList.isLoaded
-      ? countryList.data.actions.POST.socialInformation.child.children.links
-        .child.children.site.choices
-      : []
     return (
       <Modal
-        trigger={<Icon fitted name='pencil' link />}
+        trigger={<Icon fitted name='pencil' link onClick={this.setOptions} />}
         size='small'
         closeIcon
         closeOnDimmerClick={false}
@@ -606,8 +623,8 @@ const mapDispatchToProps = dispatch => {
     ChangeActiveGroupWithFile: (slug, field, data) => {
       dispatch(changeActiveGroupWithFile(slug, field, data))
     },
-    SetCountryList: () => {
-      dispatch(setCountryList())
+    SetCountryList: (slug, socialOptionsSuccessCallback) => {
+      dispatch(setCountryList(slug, socialOptionsSuccessCallback))
     }
   }
 }
