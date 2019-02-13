@@ -1,1 +1,3 @@
-# omniport-frontend-groups
+# Groups
+
+> Omniport service frontend
