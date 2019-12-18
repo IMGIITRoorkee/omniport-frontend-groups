@@ -4,16 +4,14 @@ import axios from 'axios'
 import { DateInput } from 'semantic-ui-calendar-react'
 import {
   Form,
-  Header,
-  Segment,
   Search,
   Button,
   Checkbox,
   Message
 } from 'semantic-ui-react'
-import { capitalize, startCase } from 'lodash'
+import { capitalize, startCase, debounce } from 'lodash'
 
-import { getTheme, UserCard } from 'formula_one'
+import { UserCard } from 'formula_one'
 import { urlSearchPerson } from '../urls'
 import { errorExist } from '../utils'
 import { addTeam } from '../actions'
@@ -36,7 +34,7 @@ class AddMember extends React.Component {
       message: ''
     }
   }
-  handleSearchChange = (e, { value }) => {
+  handleSearchChange = (value) => {
     this.setState({
       value: value,
       isLoading: true
@@ -149,10 +147,9 @@ class AddMember extends React.Component {
             <label>Select</label>
             <Search
               loading={isLoading}
-              onSearchChange={this.handleSearchChange}
+              onSearchChange={debounce((e, { value }) => this.handleSearchChange(value), 500)}
               onResultSelect={this.handleResultSelect}
               results={results}
-              value={value}
               fluid
               input={{ fluid: true }}
               resultRenderer={resultRenderer}
