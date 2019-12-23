@@ -33,7 +33,7 @@ export default class AppRouter extends Component {
     const { match } = this.props
     return (
       <Provider store={this.store}>
-        <PRoute path={`${match.path}/`} component={App} />
+        <PRoute path={`${match.path}/`} component={App} guestAllowed={true} />
         {/* Default Route */}
       </Provider>
     )
