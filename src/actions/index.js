@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-semantic-toasts'
 
 import { getCookie } from 'formula_one'
 import {
@@ -48,7 +49,16 @@ export const setGroupList = () => {
           }
         })
       })
-      .catch(err => {})
+      .catch(() => {
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Some error occured while fetching the groups',
+          animation: 'fade up',
+          icon: 'frown up',
+          time: 3000
+        })
+      })
   }
 }
 
@@ -66,7 +76,16 @@ export const setCountryList = (slug, successCallback) => {
         })
         successCallback(res.data)
       })
-      .catch(err => {})
+      .catch(() => {
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Some error occured while fetching the country list',
+          animation: 'fade up',
+          icon: 'frown up',
+          time: 3000
+        })
+      })
   }
 }
 
@@ -170,7 +189,16 @@ export const changeActiveGroupWithFile = (slug, field, data) => {
           }
         })
       })
-      .catch(err => {})
+      .catch(() => {
+        toast({
+          type: 'error',
+          title: 'Error',
+          description: 'Some error occured',
+          animation: 'fade up',
+          icon: 'frown up',
+          time: 3000
+        })
+      })
   }
 }
 
@@ -387,7 +415,7 @@ export const getMorePost = (slug, page) => {
           }
         })
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: 'SET_POST_LOADED',
           payload: true
@@ -442,7 +470,7 @@ export const removePost = id => {
           payload: id
         })
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: 'SET_POST_DELETING',
           payload: ''
@@ -508,7 +536,7 @@ export const getMoreTeam = page => {
           }
         })
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: 'SET_TEAM_LOADED',
           payload: true
@@ -562,7 +590,7 @@ export const removeMember = id => {
           payload: id
         })
       })
-      .catch(err => {
+      .catch(() => {
         dispatch({
           type: 'SET_MEMBER_DELETING',
           payload: ''
