@@ -15,7 +15,8 @@ import {
   urlActiveGroupSocialInfoSpecific,
   urlActiveGroupLocationtInfo,
   urlActiveGroupLocationtInfoEdit,
-  urlActiveGroupContactInfoSpecific
+  urlActiveGroupContactInfoSpecific,
+  urlGroupMassMembership
 } from '../urls'
 
 const getActiveGroup = slug => {
@@ -620,6 +621,90 @@ export const addTeam = (data, successCallback, errCallback) => {
       .catch(err => {
         dispatch({
           type: 'SET_MEMBER_CHANGING',
+          payload: false
+        })
+        errCallback(err)
+      })
+  }
+}
+
+export const addMassTeam = (data, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    dispatch({
+      type: 'SET_MASS_MEMBER_CHANGING',
+      payload: false
+    })
+    axios
+      .post(urlGroupMassMembership(), data, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_CHANGING',
+          payload: false
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_CHANGING',
+          payload: false
+        })
+        errCallback(err)
+      })
+  }
+}
+
+export const deleteMassTeam = (data, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    dispatch({
+      type: 'SET_MASS_MEMBER_DELETING',
+      payload: false
+    })
+    axios
+      .put(urlGroupMassMembership(), data, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_DELETING',
+          payload: false
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_DELETING',
+          payload: false
+        })
+        errCallback(err)
+      })
+  }
+}
+
+export const editMassTeam = (data, successCallback, errCallback) => {
+  let headers = {
+    'X-CSRFToken': getCookie('csrftoken')
+  }
+  return dispatch => {
+    dispatch({
+      type: 'SET_MASS_MEMBER_CHANGING',
+      payload: false
+    })
+    axios
+      .put(urlGroupMassMembership(), data, { headers: headers })
+      .then(res => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_CHANGING',
+          payload: false
+        })
+        successCallback(res)
+      })
+      .catch(err => {
+        dispatch({
+          type: 'SET_MASS_MEMBER_CHANGING',
           payload: false
         })
         errCallback(err)

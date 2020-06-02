@@ -19,6 +19,7 @@ import { capitalize, startCase } from 'lodash'
 import { TileCard, UserCard } from 'formula_one'
 import EmptyGroupTeamList from './empty-group-team-list'
 import AddMember from './add-member'
+import MassMemberUpdate from './mass-member-update'
 import { errorExist } from '../utils'
 import { changeTeamMember, removeMember } from '../actions'
 
@@ -31,7 +32,8 @@ class GroupTeamList extends React.Component {
       toDelete: {},
       error: false,
       success: false,
-      message: ''
+      message: '',
+      massAction: 'add'
     }
   }
   handleEdit = member => {
@@ -53,6 +55,11 @@ class GroupTeamList extends React.Component {
     const { name, value } = e.target
     this.setState({
       [name]: value
+    })
+  }
+  handleMassActionChange = (e, { value }) => {
+    this.setState({
+      massAction: value
     })
   }
   handleDateChange = (e, { name, value }) => {
@@ -113,13 +120,58 @@ class GroupTeamList extends React.Component {
     })
   }
   render () {
-    const { message, error } = this.state
+    const { message, error, massAction } = this.state
     const { activeGroup, groupTeam } = this.props
     const { hasAdminRights } = activeGroup
     const { team } = groupTeam
     return activeGroup.isLoaded && groupTeam.isLoaded ? (
       <React.Fragment>
         <Card.Group itemsPerRow={3} stackable doubling>
+          {activeGroup.hasAdminRights && (
+            <Modal
+              trigger={
+                <TileCard
+                  name='Mass Edit'
+                  iconName='edit'
+                  desc={<span>Add, edit or remove multiple members</span>}
+                />
+              }
+              size='tiny'
+              closeIcon
+            >
+              <Form>
+                <Form.Field style={{ padding: 10 }}>
+                  <Checkbox
+                    radio
+                    label='Add'
+                    name='massAction'
+                    value='add'
+                    checked={this.state.massAction === 'add'}
+                    onChange={this.handleMassActionChange}
+                  />
+                  <Checkbox
+                    radio
+                    label='Update'
+                    name='massAction'
+                    value='edit'
+                    checked={this.state.massAction === 'edit'}
+                    onChange={this.handleMassActionChange}
+                  />
+                  <Checkbox
+                    radio
+                    label='Delete'
+                    name='massAction'
+                    value='delete'
+                    checked={this.state.massAction === 'delete'}
+                    onChange={this.handleMassActionChange}
+                  />
+                </Form.Field>
+              </Form>
+              <Modal.Content>
+                <MassMemberUpdate method={massAction} />
+              </Modal.Content>
+            </Modal>
+          )}
           {activeGroup.hasAdminRights && (
             <Modal
               trigger={
@@ -377,7 +429,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupTeamList)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupTeamList)
