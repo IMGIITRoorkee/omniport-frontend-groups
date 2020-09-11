@@ -1,36 +1,36 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Container } from "semantic-ui-react";
+import React from 'react'
+import { connect } from 'react-redux'
+import { Container } from 'semantic-ui-react'
 
-import CustomBreadcrumb from "core/common/src/components/custom-breadcrumb";
-import EmptyGroupDetail from "./empty-group-detail";
-import GroupBranding from "./group-branding";
-import GroupAbout from "./group-about";
-import { setActiveGroup } from "../actions";
-import { urlBaseView } from "../urls";
-import "../css/group.css";
+import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
+import EmptyGroupDetail from './empty-group-detail'
+import GroupBranding from './group-branding'
+import GroupAbout from './group-about'
+import { setActiveGroup } from '../actions'
+import { urlBaseView } from '../urls'
+import '../css/group.css'
 
 class GroupDetail extends React.Component {
-  componentDidMount() {
-    this.props.SetActiveGroup(this.props.match.params.slug, (err) => {
-      this.props.history.push("/404");
-    });
+  componentDidMount () {
+    this.props.SetActiveGroup(this.props.match.params.slug, err => {
+      this.props.history.push('/404')
+    })
   }
 
   loadMore = () => {
-    this.props.handleScroll(true);
-  };
+    this.props.handleScroll(true)
+  }
 
-  render() {
-    const { activeGroup } = this.props;
+  render () {
+    const { activeGroup } = this.props
     return (
       <div>
         {activeGroup.isLoaded ? (
           <Container>
             <CustomBreadcrumb
               list={[
-                { name: "Groups", link: urlBaseView() },
-                { name: activeGroup.data.name },
+                { name: 'Groups', link: urlBaseView() },
+                { name: activeGroup.data.name }
               ]}
             />
             <GroupBranding />
@@ -43,21 +43,21 @@ class GroupDetail extends React.Component {
           <EmptyGroupDetail />
         )}
       </div>
-    );
+    )
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
-    activeGroup: state.activeGroup,
-  };
+    activeGroup: state.activeGroup
+  }
 }
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     SetActiveGroup: (slug, errCallback) => {
-      dispatch(setActiveGroup(slug, errCallback));
-    },
-  };
-};
+      dispatch(setActiveGroup(slug, errCallback))
+    }
+  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(GroupDetail)
