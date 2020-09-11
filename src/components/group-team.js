@@ -41,7 +41,7 @@ class GroupTeam extends React.Component {
   }
 
   loadMore = () => {
-    this.props.handleScroll(true)
+    this.props.handleScroll({}, true)
   }
 
   render () {
