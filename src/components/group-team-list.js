@@ -355,7 +355,7 @@ class GroupTeamList extends React.Component {
         ) : (
           <Grid>
             <Grid.Column textAlign='center'>
-              <Button animated color={getTheme()} onClick={this.loadMore}>
+              <Button basic animated='vertical' color={getTheme()} onClick={this.loadMore}>
                 <Button.Content visible>Show more</Button.Content>
                 <Button.Content hidden>
                   <Icon name='arrow down' />
