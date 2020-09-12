@@ -11,7 +11,8 @@ import {
   Button,
   Message,
   Dropdown,
-  Placeholder
+  Placeholder,
+  Grid,
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import { capitalize, startCase } from 'lodash'
@@ -21,6 +22,7 @@ import EmptyGroupTeamList from './empty-group-team-list'
 import AddMember from './add-member'
 import { errorExist } from '../utils'
 import { changeTeamMember, removeMember } from '../actions'
+import { getTheme } from 'formula_one'
 
 class GroupTeamList extends React.Component {
   constructor (props) {
@@ -111,6 +113,9 @@ class GroupTeamList extends React.Component {
       error: true,
       message: err.response.data
     })
+  }
+  loadMore = () => {
+    this.props.loadMore()
   }
   render () {
     const { message, error } = this.state
@@ -348,10 +353,16 @@ class GroupTeamList extends React.Component {
             No more members available. You have scrolled enough for today.
           </Segment>
         ) : (
-          <Segment basic textAlign='center'>
-            <Icon name='sort' />
-            Scroll for more.
-          </Segment>
+          <Grid>
+            <Grid.Column textAlign='center'>
+              <Button animated color={getTheme()} onClick={this.loadMore}>
+                <Button.Content visible>Show more</Button.Content>
+                <Button.Content hidden>
+                  <Icon name='arrow down' />
+                </Button.Content>
+              </Button>
+            </Grid.Column>
+          </Grid>
         )}
       </React.Fragment>
     ) : (
@@ -377,7 +388,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupTeamList)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupTeamList)

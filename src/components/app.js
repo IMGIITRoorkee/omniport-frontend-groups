@@ -11,7 +11,7 @@ import { setGroupList, getMorePost, getMoreTeam } from '../actions'
 import main from 'formula_one/src/css/app.css'
 
 class App extends React.PureComponent {
-  handleScroll = values => {
+  handleScroll = (values, forceLoad = false) => {
     let part = window.location.href.split('/')
     const lastSegment = part.pop() || part.pop()
     const { activeGroupPost, activeGroup, groupTeam } = this.props
@@ -19,7 +19,7 @@ class App extends React.PureComponent {
       if (lastSegment === 'team') {
         if (groupTeam.isLoaded && activeGroup.isLoaded) {
           if (
-            (1 - values.top) * values.scrollHeight <= 800 &&
+            (forceLoad || (1 - values.top) * values.scrollHeight <= 800) &&
             groupTeam.team.next
           ) {
             this.props.GetMoreTeam(groupTeam.team.next)
@@ -28,7 +28,7 @@ class App extends React.PureComponent {
       } else {
         if (activeGroupPost.isLoaded && activeGroup.isLoaded) {
           if (
-            (1 - values.top) * values.scrollHeight <= 800 &&
+            (forceLoad || (1 - values.top) * values.scrollHeight <= 800) &&
             activeGroupPost.post.next
           ) {
             this.props.GetMorePost(
@@ -46,8 +46,20 @@ class App extends React.PureComponent {
       <Scrollbars autoHide onScrollFrame={this.handleScroll}>
         <Switch>
           <Route exact path={`${match.path}`} component={GroupList} />
-          <Route exact path={`${match.path}:slug`} component={GroupDetail} />
-          <Route exact path={`${match.path}:slug/team`} component={GroupTeam} />
+          <Route
+            exact
+            path={`${match.path}:slug`}
+            render={props => (
+              <GroupDetail {...props} handleScroll={this.handleScroll} />
+            )}
+          />
+          <Route
+            exact
+            path={`${match.path}:slug/team`}
+            render={props => (
+              <GroupTeam {...props} handleScroll={this.handleScroll} />
+            )}
+          />
           <Route render={props => <Redirect to='/404' />} />
         </Switch>
       </Scrollbars>
@@ -76,7 +88,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App)

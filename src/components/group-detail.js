@@ -17,6 +17,10 @@ class GroupDetail extends React.Component {
     })
   }
 
+  loadMore = () => {
+    this.props.handleScroll({}, true)
+  }
+
   render () {
     const { activeGroup } = this.props
     return (
@@ -30,7 +34,10 @@ class GroupDetail extends React.Component {
               ]}
             />
             <GroupBranding />
-            <GroupAbout slug={this.props.match.params.slug} />
+            <GroupAbout
+              loadMore={this.loadMore}
+              slug={this.props.match.params.slug}
+            />
           </Container>
         ) : (
           <EmptyGroupDetail />
@@ -53,7 +60,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupDetail)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupDetail)

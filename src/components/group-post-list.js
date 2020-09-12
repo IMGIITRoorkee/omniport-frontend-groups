@@ -1,13 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Placeholder, Segment, Icon, Card } from 'semantic-ui-react'
+import {
+  Grid,
+  Placeholder,
+  Segment,
+  Icon,
+  Card,
+  Button,
+} from 'semantic-ui-react'
 
 import GroupPostCard from './group-post-card'
 import GroupAddPost from './group-add-post'
+import { getTheme } from 'formula_one'
 
 import '../css/group.css'
 
 class GroupPostList extends React.Component {
+  loadMore = () => {
+    this.props.loadMore()
+  }
   render () {
     const { activeGroupPost, activeGroup } = this.props
     const { isLoaded, post } = activeGroupPost
@@ -42,11 +53,22 @@ class GroupPostList extends React.Component {
               </Card>
             )
           })}
-        {isLoaded && !next && (
+        {isLoaded && !next ? (
           <Segment basic textAlign='center'>
             <Icon name='frown outline' />
             No more bits available. You have scrolled enough for today.
           </Segment>
+        ) : (
+          <Grid>
+            <Grid.Column textAlign='center'>
+              <Button animated color={getTheme()} onClick={this.loadMore}>
+                <Button.Content visible>Show more</Button.Content>
+                <Button.Content hidden>
+                  <Icon name='arrow down' />
+                </Button.Content>
+              </Button>
+            </Grid.Column>
+          </Grid>
         )}
       </Grid.Column>
     )
@@ -63,7 +85,4 @@ const mapDispatchToProps = dispatch => {
   return {}
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupPostList)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupPostList)

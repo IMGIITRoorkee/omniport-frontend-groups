@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Container, Menu } from 'semantic-ui-react'
+import { Container, Menu, } from 'semantic-ui-react'
 
 import CustomBreadcrumb from 'core/common/src/components/custom-breadcrumb'
 import GroupTeamList from './group-team-list'
 import EmptyGroupTeam from './empty-group-team'
 import { setActiveGroupWithTeam } from '../actions/index'
-import { urlGroupDetailView, urlBaseView } from '../urls'
+import { urlGroupDetailView, urlBaseView, } from '../urls'
 
 class GroupTeam extends React.Component {
   constructor (props) {
@@ -38,6 +38,10 @@ class GroupTeam extends React.Component {
       this.props.SetActiveGroupWithTeam(this.props.match.params.slug, false)
     }
     this.setState({ activeItem: name, data })
+  }
+
+  loadMore = () => {
+    this.props.handleScroll({}, true)
   }
 
   render () {
@@ -75,7 +79,7 @@ class GroupTeam extends React.Component {
                     onClick={this.handleClick}
                   />
                 </Menu>
-                <GroupTeamList />
+                <GroupTeamList loadMore={this.loadMore} />
               </React.Fragment>
             ) : (
               <EmptyGroupTeam />
@@ -101,7 +105,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupTeam)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupTeam)

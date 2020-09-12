@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Card, Icon, Grid, Segment } from 'semantic-ui-react'
+import { Card, Icon, Grid, Segment, } from 'semantic-ui-react'
 
 import { getTheme, getThemeObject } from 'formula_one'
 import PurposeCard from './purpose-card'
@@ -12,6 +12,9 @@ import { urlGroupTeam } from '../urls'
 import '../css/group.css'
 
 class GroupAbout extends React.Component {
+  loadMore = () => {
+    this.props.loadMore()
+  }
   render () {
     const { activeGroup } = this.props
     return (
@@ -33,7 +36,7 @@ class GroupAbout extends React.Component {
             </Segment>
           </Link>
         </Grid.Column>
-        <GroupPostList />
+        <GroupPostList loadMore={this.loadMore} />
       </Grid>
     )
   }
@@ -48,7 +51,4 @@ const mapDispatchToProps = dispatch => {
   return {}
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GroupAbout)
+export default connect(mapStateToProps, mapDispatchToProps)(GroupAbout)
