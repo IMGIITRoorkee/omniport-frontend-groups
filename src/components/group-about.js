@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Card, Icon, Grid, Segment } from 'semantic-ui-react'
+import { Card, Icon, Grid, Segment, } from 'semantic-ui-react'
 
 import { getTheme, getThemeObject } from 'formula_one'
 import PurposeCard from './purpose-card'

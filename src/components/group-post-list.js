@@ -6,7 +6,7 @@ import {
   Segment,
   Icon,
   Card,
-  Button
+  Button,
 } from 'semantic-ui-react'
 
 import GroupPostCard from './group-post-card'

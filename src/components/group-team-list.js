@@ -12,7 +12,7 @@ import {
   Message,
   Dropdown,
   Placeholder,
-  Grid
+  Grid,
 } from 'semantic-ui-react'
 import { DateInput } from 'semantic-ui-calendar-react'
 import { capitalize, startCase } from 'lodash'
