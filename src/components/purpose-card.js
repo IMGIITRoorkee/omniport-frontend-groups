@@ -16,6 +16,8 @@ import { getTheme } from 'formula_one'
 import { changeActiveGroup } from '../actions'
 import '../css/group.css'
 
+import { Editor } from '@tinymce/tinymce-react'
+
 class PurposeCard extends React.Component {
   constructor (props) {
     super(props)
@@ -75,6 +77,15 @@ class PurposeCard extends React.Component {
     })
   }
 
+handleEditorChange = (content) => {
+    const { activeGroup, field } = this.props
+    const { data } = activeGroup
+
+    this.setState({[field]: content.level.content})
+        
+   }
+
+
   render () {
     const { error, message, success } = this.state
     const { activeGroup, heading, field } = this.props
@@ -133,18 +144,41 @@ class PurposeCard extends React.Component {
                     ) && error
                   }
                 >
-                  <TextArea
-                    autoHeight
-                    name={field}
-                    value={this.state[field]}
-                    onChange={this.handleChange}
-                  />
+                  
+		  <Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
+		  init={{
+                        menubar: false,
+                        plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                        ],
+                        }}
+		  value={this.state[field]}
+		  textareaName={field}
+		  onChange={this.handleEditorChange}
+ 			 />
                 </Form.Field>
               </Form>
               <Dimmer active={inEditMode === field && !error} inverted />
             </Dimmer.Dimmable>
           ) : (
-            data[field] || 'None'
+			<Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+			init={{
+                        	menubar: false,
+                        	plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                        	],
+                        	}}
+			value={data[field]}
+			textareaName={field}
+			inline={true}
+			disabled={true}
+			onChange={this.handleEditorChange}
+                         />
+ 			|| 'None'
           )}
         </Segment>
       </React.Fragment>

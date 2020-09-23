@@ -20,6 +20,7 @@ import { addPost } from '../actions'
 
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
+import { Editor } from '@tinymce/tinymce-react'
 
 class GroupAddPost extends React.Component {
   constructor (props) {
@@ -52,6 +53,11 @@ class GroupAddPost extends React.Component {
       [name]: value
     })
   }
+
+handleEditorChange = (content) => {
+    this.setState({text: content.level.content})
+   }
+
   handleClick = () => {
     var formData = new FormData()
     formData.append('group', this.props.activeGroup.data.id)
@@ -168,13 +174,25 @@ class GroupAddPost extends React.Component {
                   required
                   error={error && errorExist(message, 'text')}
                 >
-                  <TextArea
-                    autoHeight
-                    rows={2}
-                    onChange={this.handleChange}
-                    name='text'
+                  <Editor
+	    	    apiKey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+                    onChange={this.handleEditorChange}
+                    textareaName="text"
                     value={this.state.text}
-                    placeholder='Write something here...'
+                    initialValue="Write something here..."
+	    	    init={{
+          		menubar: false,
+           		plugins: [
+             		'advlist autolink lists link image charmap print preview anchor',
+             		'searchreplace visualblocks code fullscreen',
+             		'insertdatetime media table paste code help wordcount'
+           		],
+           		toolbar:
+             		'undo redo | formatselect | bold italic backcolor | \
+             		alignleft aligncenter alignright alignjustify | \
+             		bullist numlist outdent indent | removeformat | help'
+         		}}
+	    	    
                   />
                 </Form.Field>
 
