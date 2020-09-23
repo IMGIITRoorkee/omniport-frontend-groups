@@ -16,7 +16,7 @@ import { getTheme } from 'formula_one'
 import { changeActiveGroup } from '../actions'
 import '../css/group.css'
 
-import {Editor} from '@tinymce/tinymce-react'
+import { Editor } from '@tinymce/tinymce-react'
 
 class PurposeCard extends React.Component {
   constructor (props) {
@@ -82,7 +82,7 @@ handleEditorChange = (content) => {
     const { data } = activeGroup
 
     this.setState({[field]: content.level.content})
-        console.log(content.level.content)
+        
    }
 
 
@@ -163,22 +163,22 @@ handleEditorChange = (content) => {
               <Dimmer active={inEditMode === field && !error} inverted />
             </Dimmer.Dimmable>
           ) : (
-		  <Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
-                  init={{
-                        menubar: false,
-                        plugins: [
+			<Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+			init={{
+                        	menubar: false,
+                        	plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen',
                         'insertdatetime media table paste code help wordcount'
-                        ],
-                        }}
-                  value={data[field]}
-                  textareaName={field}
-		  inline={true}
-		  disabled={true}
-                  onChange={this.handleEditorChange}
+                        	],
+                        	}}
+			value={data[field]}
+			textareaName={field}
+			inline={true}
+			disabled={true}
+			onChange={this.handleEditorChange}
                          />
- || 'None'
+ 			|| 'None'
           )}
         </Segment>
       </React.Fragment>

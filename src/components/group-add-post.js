@@ -20,13 +20,13 @@ import { addPost } from '../actions'
 
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
-import {Editor} from '@tinymce/tinymce-react'
+import { Editor } from '@tinymce/tinymce-react'
 
 class GroupAddPost extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      text: "",
+      text: '',
       fileSrc: '',
       logo: null,
       success: false,
@@ -56,7 +56,6 @@ class GroupAddPost extends React.Component {
 
 handleEditorChange = (content) => {
     this.setState({text: content.level.content})
-	console.log(content.level.content)
    }
 
   handleClick = () => {
@@ -177,12 +176,10 @@ handleEditorChange = (content) => {
                 >
                   <Editor
 	    	    apiKey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
-                    /*init={{height=autoHeight}}*/
-	    	    /*rows={2}*/
                     onChange={this.handleEditorChange}
                     textareaName="text"
                     value={this.state.text}
-                    initialValue="<p>Write something here...</p>"
+                    initialValue="Write something here..."
 	    	    init={{
           		menubar: false,
            		plugins: [

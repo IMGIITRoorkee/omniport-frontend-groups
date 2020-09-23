@@ -7,6 +7,9 @@ import { Tiles } from 'formula_one'
 import { setGroupList } from '../actions'
 import { urlGroupDetailView } from '../urls'
 
+import { Editor } from '@tinymce/tinymce-react'
+
+
 class GroupList extends React.PureComponent {
   componentDidMount () {
     this.props.SetGroupList()
@@ -21,7 +24,19 @@ class GroupList extends React.PureComponent {
             tiles={groupList.data.map(group => {
               return {
                 name: group.name,
-                desc: <span>{group.shortDescription}</span>,
+                desc: <Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" init={{
+                        menubar: false,
+                        plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                        ],
+                        toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help'
+                        }}
+                         disabled={true} inline={true} initialValue={group.shortDescription} />,
                 link: urlGroupDetailView(group.slug),
                 iconName: 'users',
                 imageUrl: group.logo
