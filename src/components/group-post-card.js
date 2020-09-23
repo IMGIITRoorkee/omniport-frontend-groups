@@ -123,7 +123,8 @@ class GroupPostCard extends React.Component {
 			}}
 			disabled={true}
 			inline={true} 
-			initialValue={post.text} /> 
+			initialValue={post.text} 
+	    /> 
 	    </div>
           {post.image && (
             <div styleName='post-card-image-container'>
