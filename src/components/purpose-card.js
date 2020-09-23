@@ -180,7 +180,7 @@ class PurposeCard extends React.Component {
 			disabled={true}
 			onChange={this.handleEditorChange}
 		/>
- 			|| 'None'
+ 		|| 'None'
           )}
         </Segment>
       </React.Fragment>
