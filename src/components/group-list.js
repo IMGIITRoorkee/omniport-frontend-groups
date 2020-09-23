@@ -24,19 +24,24 @@ class GroupList extends React.PureComponent {
             tiles={groupList.data.map(group => {
               return {
                 name: group.name,
-                desc: <Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" init={{
-                        menubar: false,
-                        plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                        ],
-                        toolbar:
-                        'undo redo | formatselect | bold italic backcolor | \
-                        alignleft aligncenter alignright alignjustify | \
-                        bullist numlist outdent indent | removeformat | help'
-                        }}
-                         disabled={true} inline={true} initialValue={group.shortDescription} />,
+                desc: <Editor 
+			apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
+			init={{
+				menubar: false,
+				plugins: [
+					'advlist autolink lists link image charmap print preview anchor',
+					'searchreplace visualblocks code fullscreen',
+					'insertdatetime media table paste code help wordcount'
+				],
+				toolbar:
+					'undo redo | formatselect | bold italic backcolor | \
+				alignleft aligncenter alignright alignjustify | \
+				bullist numlist outdent indent | removeformat | help'
+			}}
+			disabled={true}
+			inline={true}
+			initialValue={group.shortDescription} 
+		      />,
                 link: urlGroupDetailView(group.slug),
                 iconName: 'users',
                 imageUrl: group.logo

@@ -77,13 +77,13 @@ class PurposeCard extends React.Component {
     })
   }
 
-handleEditorChange = (content) => {
+  handleEditorChange = (content) => {
     const { activeGroup, field } = this.props
     const { data } = activeGroup
 
     this.setState({[field]: content.level.content})
         
-   }
+  }
 
 
   render () {
@@ -145,39 +145,41 @@ handleEditorChange = (content) => {
                   }
                 >
                   
-		  <Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
-		  init={{
-                        menubar: false,
-                        plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                        ],
-                        }}
-		  value={this.state[field]}
-		  textareaName={field}
-		  onChange={this.handleEditorChange}
- 			 />
+		  <Editor 
+			apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
+			init={{
+                        	menubar: false,
+                        	plugins: [
+                        	'advlist autolink lists link image charmap print preview anchor',
+                        	'searchreplace visualblocks code fullscreen',
+                        	'insertdatetime media table paste code help wordcount'
+                        	],
+                        	}}
+		  	value={this.state[field]}
+		  	textareaName={field}
+		  	onChange={this.handleEditorChange}
+ 		/>
                 </Form.Field>
               </Form>
               <Dimmer active={inEditMode === field && !error} inverted />
             </Dimmer.Dimmable>
           ) : (
-			<Editor apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+		<Editor 
+		  	apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
 			init={{
                         	menubar: false,
                         	plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
+                        		'advlist autolink lists link image charmap print preview anchor',
+                        		'searchreplace visualblocks code fullscreen',
+                        		'insertdatetime media table paste code help wordcount'
                         	],
-                        	}}
+                        }}
 			value={data[field]}
 			textareaName={field}
 			inline={true}
 			disabled={true}
 			onChange={this.handleEditorChange}
-                         />
+		/>
  			|| 'None'
           )}
         </Segment>

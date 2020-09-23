@@ -54,9 +54,9 @@ class GroupAddPost extends React.Component {
     })
   }
 
-handleEditorChange = (content) => {
+  handleEditorChange = (content) => {
     this.setState({text: content.level.content})
-   }
+  }
 
   handleClick = () => {
     var formData = new FormData()
@@ -174,26 +174,26 @@ handleEditorChange = (content) => {
                   required
                   error={error && errorExist(message, 'text')}
                 >
-                  <Editor
-	    	    apiKey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
-                    onChange={this.handleEditorChange}
-                    textareaName="text"
-                    value={this.state.text}
-                    initialValue="Write something here..."
-	    	    init={{
-          		menubar: false,
-           		plugins: [
-             		'advlist autolink lists link image charmap print preview anchor',
-             		'searchreplace visualblocks code fullscreen',
-             		'insertdatetime media table paste code help wordcount'
+		<Editor
+			apiKey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+			onChange={this.handleEditorChange}
+			textareaName="text"
+			value={this.state.text}
+			initialValue="Write something here..."
+			init={{
+				menubar: false,
+				plugins: [
+					'advlist autolink lists link image charmap print preview anchor',
+					'searchreplace visualblocks code fullscreen',
+					'insertdatetime media table paste code help wordcount'
            		],
-           		toolbar:
-             		'undo redo | formatselect | bold italic backcolor | \
-             		alignleft aligncenter alignright alignjustify | \
-             		bullist numlist outdent indent | removeformat | help'
-         		}}
+				toolbar:
+					'undo redo | formatselect | bold italic backcolor | \
+				alignleft aligncenter alignright alignjustify | \
+				bullist numlist outdent indent | removeformat | help'
+			}}
 	    	    
-                  />
+		/>
                 </Form.Field>
 
                 <Dimmer active={activeGroupPost.adding} inverted />
