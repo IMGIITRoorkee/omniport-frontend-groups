@@ -77,12 +77,48 @@ class PurposeCard extends React.Component {
     })
   }
 
-  handleEditorChange = (content) => {
+    handleEditorChange = (content) => {
     const { activeGroup, field } = this.props
     const { data } = activeGroup
 
     this.setState({[field]: content.level.content})
-        
+
+  }
+
+  rtffield = () => {
+    const{ error, message, success } = this.state
+    const { activeGroup, heading, field } = this.props
+    const { data, inEditMode, hasEditRights } = activeGroup
+    return(
+      <Editor
+        apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+        init={{
+          menubar: false,
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+            ],
+        }}
+        value={this.state[field]}
+        textareaName={field}
+        onChange={this.handleEditorChange}
+      />
+    )
+  }
+
+
+  textfield = () =>{
+    const { error, message, success } = this.state
+    const { activeGroup, heading, field } = this.props
+    const { data, inEditMode, hasEditRights } = activeGroup
+    return( 
+	    <TextArea
+              autoHeight
+              name={field}
+              value={this.state[field]}
+              onChange={this.handleChange}
+            />)
   }
 
 
@@ -90,6 +126,27 @@ class PurposeCard extends React.Component {
     const { error, message, success } = this.state
     const { activeGroup, heading, field } = this.props
     const { data, inEditMode, hasEditRights } = activeGroup
+            
+    let toedit;
+    let display;
+    if({ field }.field =="shortDescription")
+    {
+      toedit=<span>{ this.textfield() }</span>;
+    }
+    else
+    {
+      toedit=<span>{ this.rtffield() }</span>;
+    }
+    if(!this.state[field])
+    {
+      display="None"
+    }
+    else
+    { 
+      display=this.state[field]
+    }
+
+
     return (
       <React.Fragment>
         <Segment
@@ -144,44 +201,29 @@ class PurposeCard extends React.Component {
                     ) && error
                   }
                 >
-                  
-		  <Editor 
-			apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
-			init={{
-                        	menubar: false,
-                        	plugins: [
-                        	'advlist autolink lists link image charmap print preview anchor',
-                        	'searchreplace visualblocks code fullscreen',
-                        	'insertdatetime media table paste code help wordcount'
-                        	],
-                        	}}
-		  	value={this.state[field]}
-		  	textareaName={field}
-		  	onChange={this.handleEditorChange}
- 		/>
-                </Form.Field>
+                  {toedit}
+		</Form.Field>
               </Form>
               <Dimmer active={inEditMode === field && !error} inverted />
             </Dimmer.Dimmable>
-          ) : (
-		<Editor 
-		  	apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
-			init={{
-                        	menubar: false,
-                        	plugins: [
-                        		'advlist autolink lists link image charmap print preview anchor',
-                        		'searchreplace visualblocks code fullscreen',
-                        		'insertdatetime media table paste code help wordcount'
-                        	],
-                        }}
-			value={data[field]}
-			textareaName={field}
-			inline={true}
-			disabled={true}
-			onChange={this.handleEditorChange}
-		/>
- 		|| 'None'
-          )}
+          ) : (  
+                 <Editor
+                    apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
+                    init={{
+                      menubar: false,
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                    }}
+                    value={display}
+                    textareaName={field}
+                    onChange={this.handleEditorChange}
+                    disabled={true}
+                    inline={true}
+                 /> 
+             )}
         </Segment>
       </React.Fragment>
     )
