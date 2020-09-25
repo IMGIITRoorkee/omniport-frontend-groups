@@ -7,9 +7,6 @@ import { Tiles } from 'formula_one'
 import { setGroupList } from '../actions'
 import { urlGroupDetailView } from '../urls'
 
-import { Editor } from '@tinymce/tinymce-react'
-
-
 class GroupList extends React.PureComponent {
   componentDidMount () {
     this.props.SetGroupList()
