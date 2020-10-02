@@ -222,11 +222,6 @@ class EditBranding extends React.Component {
       primaryPhoneNumber,
       emailAddress
     }
-	 console.log({primaryPhoneNumber});
-	  console.log({emailAddress});
-	  console.log(this.props.activeGroup.data.slug);
-	  console.log(this.props.activeGroup.contactInformation[0]);
-	  console.log(this.props.activeGroup.contactInformation[0].id);
     this.props.ChangeActiveGroupContact(
       this.props.activeGroup.data.contactInformation[0] &&
         this.props.activeGroup.data.contactInformation[0].id,
