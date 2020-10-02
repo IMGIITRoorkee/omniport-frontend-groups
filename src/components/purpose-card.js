@@ -18,11 +18,6 @@ import '../css/group.css'
 import { Rtffield } from '../fields'
 import { Textfield } from '../fields'
 
-import { Editor } from '@tinymce/tinymce-react'
-
-
-
-
 
 class PurposeCard extends React.Component {
   constructor (props) {

@@ -5,8 +5,10 @@ import { Card, Image, Icon, Dropdown, Modal, Button } from 'semantic-ui-react'
 
 import { DefaultDP } from 'formula_one'
 import { removePost } from '../actions'
+import { Rtffield } from '../fields'
+
 import '../css/group-post-card.css'
-import { Editor } from '@tinymce/tinymce-react'
+
 
 class GroupPostCard extends React.Component {
   constructor (props) {
@@ -108,24 +110,7 @@ class GroupPostCard extends React.Component {
         </Card.Content>
         <Card.Content>
           <div styleName='post-card-description'>
-            <Editor 
-              apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek" 
-              init={{
-                menubar: false,
-                plugins: [
-                  'advlist autolink lists link image charmap print preview anchor',
-                  'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help wordcount'
-                ],
-                toolbar:
-                  'undo redo | formatselect | bold italic backcolor | \
-                  alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | help'
-              }}
-              disabled={true}
-              inline={true} 
-              initialValue={post.text} 
-            /> 
+	    <Rtffield field = {post.text} handleEditorChange={null} disabled={true} inline={true}/>
 	  </div>
           {post.image && (
             <div styleName='post-card-image-container'>

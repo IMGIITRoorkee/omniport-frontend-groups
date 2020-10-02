@@ -17,10 +17,12 @@ import { capitalize, startCase } from 'lodash'
 import { DefaultDP, getTheme } from 'formula_one'
 import { errorExist } from '../utils'
 import { addPost } from '../actions'
+import { Rtffield } from '../fields'
+
 
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
-import { Editor } from '@tinymce/tinymce-react'
+
 
 class GroupAddPost extends React.Component {
   constructor (props) {
@@ -174,25 +176,8 @@ class GroupAddPost extends React.Component {
                   required
                   error={error && errorExist(message, 'text')}
                 >
-                <Editor
-                  apiKey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"
-                  onChange={this.handleEditorChange}
-                  textareaName="text"
-                  value={this.state.text}
-                  initialValue="Write something here..."
-                  init={{
-                    menubar: false,
-                    plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount'
-                    ],
-                    toolbar:
-                      'undo redo | formatselect | bold italic backcolor | \
-                      alignleft aligncenter alignright alignjustify | \
-                      bullist numlist outdent indent | removeformat | help'
-                  }}  
-                />
+                <Rtffield field = {this.state.text} handleEditorChange={this.handleEditorChange} disabled={false} inline={false}/>
+
                 </Form.Field>
 
                 <Dimmer active={activeGroupPost.adding} inverted />
