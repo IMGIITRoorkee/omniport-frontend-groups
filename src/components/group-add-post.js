@@ -19,10 +19,8 @@ import { errorExist } from '../utils'
 import { addPost } from '../actions'
 import { Rtffield } from '../fields'
 
-
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
-
 
 class GroupAddPost extends React.Component {
   constructor (props) {

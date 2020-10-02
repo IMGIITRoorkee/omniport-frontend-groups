@@ -26,7 +26,6 @@ export const Rtffield = (props)  => {
   )
 }
 
-
 export const Textfield = (props) =>{
   return(
     <TextArea

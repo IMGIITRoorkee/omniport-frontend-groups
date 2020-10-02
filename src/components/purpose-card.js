@@ -18,7 +18,6 @@ import '../css/group.css'
 import { Rtffield } from '../fields'
 import { Textfield } from '../fields'
 
-
 class PurposeCard extends React.Component {
   constructor (props) {
     super(props)
@@ -78,14 +77,11 @@ class PurposeCard extends React.Component {
     })
   }
 
-
   handleEditorChange = (content) => {
     const { activeGroup, field } = this.props
     const { data } = activeGroup
     this.setState({[field]: content.level.content})
   }
-
-
 
   render () {
     const { error, message, success } = this.state
@@ -100,7 +96,6 @@ class PurposeCard extends React.Component {
     let Component = dict[name];
     let display;
     display =  this.state[field]||'None'
-
 
     return (
       <React.Fragment>

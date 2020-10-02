@@ -6,9 +6,7 @@ import { Card, Image, Icon, Dropdown, Modal, Button } from 'semantic-ui-react'
 import { DefaultDP } from 'formula_one'
 import { removePost } from '../actions'
 import { Rtffield } from '../fields'
-
 import '../css/group-post-card.css'
-
 
 class GroupPostCard extends React.Component {
   constructor (props) {
