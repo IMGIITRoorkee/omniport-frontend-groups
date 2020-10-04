@@ -4,7 +4,7 @@ import { TextArea } from 'semantic-ui-react'
 
 import { Editor } from '@tinymce/tinymce-react'
 
-export const Rtffield = (props)  => {	
+export const RTField = (props)  => {	
   return(
     <Editor
       apikey="fb3pb0ana4mvi60jwhefs3g2u3501d9s915efud2rh6ax2ek"

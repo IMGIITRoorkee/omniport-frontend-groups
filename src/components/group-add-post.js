@@ -17,7 +17,7 @@ import { capitalize, startCase } from 'lodash'
 import { DefaultDP, getTheme } from 'formula_one'
 import { errorExist } from '../utils'
 import { addPost } from '../actions'
-import { Rtffield } from '../fields'
+import { RTField } from '../fields'
 
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
@@ -174,8 +174,12 @@ class GroupAddPost extends React.Component {
                   required
                   error={error && errorExist(message, 'text')}
                 >
-                <Rtffield field = {this.state.text} handleEditorChange={this.handleEditorChange} disabled={false} inline={false}/>
-
+                <RTField 
+                  field={this.state.text} 
+                  handleEditorChange={this.handleEditorChange} 
+                  disabled={false} 
+                  inline={false} 
+                />
                 </Form.Field>
 
                 <Dimmer active={activeGroupPost.adding} inverted />
