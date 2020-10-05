@@ -97,7 +97,6 @@ class PurposeCard extends React.Component {
     let name = {field}.field
     let Component = purposeField[name]
     let display = this.state[field] || 'None'
-
     return (
       <React.Fragment>
         <Segment

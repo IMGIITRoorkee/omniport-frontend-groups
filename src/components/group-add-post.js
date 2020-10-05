@@ -53,7 +53,7 @@ class GroupAddPost extends React.Component {
       [name]: value
     })
   }
-  handleEditorChange = (content) => {
+  handleEditorChange = content => {
     this.setState({
       text: content.level.content
     })
