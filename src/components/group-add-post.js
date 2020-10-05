@@ -53,11 +53,11 @@ class GroupAddPost extends React.Component {
       [name]: value
     })
   }
-
   handleEditorChange = (content) => {
-    this.setState({text: content.level.content})
+    this.setState({
+      text: content.level.content
+    })
   }
-
   handleClick = () => {
     var formData = new FormData()
     formData.append('group', this.props.activeGroup.data.id)

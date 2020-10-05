@@ -77,10 +77,12 @@ class PurposeCard extends React.Component {
     })
   }
 
-  handleEditorChange = (content) => {
+  handleEditorChange = content => {
     const { activeGroup, field } = this.props
     const { data } = activeGroup
-    this.setState({[field]: content.level.content})
+    this.setState({
+      [field]: content.level.content
+    })
   }
 
   render () {
@@ -91,11 +93,10 @@ class PurposeCard extends React.Component {
       'shortDescription': Textfield,
       'about': RTField,
       'mission': RTField
-    };
+    }
     let name = {field}.field
-    let Component = purposeField[name];
-    let display;
-    display = this.state[field] || 'None'
+    let Component = purposeField[name]
+    let display = this.state[field] || 'None'
 
     return (
       <React.Fragment>
@@ -170,7 +171,7 @@ class PurposeCard extends React.Component {
                   disabled={true} 
                   inline={true}
                 />
-             )}
+          )}
         </Segment>
       </React.Fragment>
     )

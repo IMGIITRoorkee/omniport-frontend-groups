@@ -108,7 +108,7 @@ class GroupPostCard extends React.Component {
         </Card.Content>
         <Card.Content>
           <div styleName='post-card-description'>
-	    <RTField 
+            <RTField 
               field={post.text} 
               handleEditorChange={null} 
               disabled={true} 
