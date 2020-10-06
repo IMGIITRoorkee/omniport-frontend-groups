@@ -5,6 +5,7 @@ import { Card, Image, Icon, Dropdown, Modal, Button } from 'semantic-ui-react'
 
 import { DefaultDP } from 'formula_one'
 import { removePost } from '../actions'
+import { RTField } from '../fields'
 import '../css/group-post-card.css'
 
 class GroupPostCard extends React.Component {
@@ -106,7 +107,14 @@ class GroupPostCard extends React.Component {
           </div>
         </Card.Content>
         <Card.Content>
-          <div styleName='post-card-description'>{post.text}</div>
+          <div styleName='post-card-description'>
+            <RTField 
+              field={post.text} 
+              handleEditorChange={null} 
+              disabled={true} 
+              inline={true}
+            />
+	  </div>
           {post.image && (
             <div styleName='post-card-image-container'>
               <Image

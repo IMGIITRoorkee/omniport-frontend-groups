@@ -15,6 +15,8 @@ import {
 import { getTheme } from 'formula_one'
 import { changeActiveGroup } from '../actions'
 import '../css/group.css'
+import { RTField } from '../fields'
+import { Textfield } from '../fields'
 
 class PurposeCard extends React.Component {
   constructor (props) {
@@ -75,10 +77,26 @@ class PurposeCard extends React.Component {
     })
   }
 
+  handleEditorChange = content => {
+    const { activeGroup, field } = this.props
+    const { data } = activeGroup
+    this.setState({
+      [field]: content.level.content
+    })
+  }
+
   render () {
     const { error, message, success } = this.state
     const { activeGroup, heading, field } = this.props
     const { data, inEditMode, hasEditRights } = activeGroup
+    const purposeField = {
+      'shortDescription': Textfield,
+      'about': RTField,
+      'mission': RTField
+    }
+    let name = {field}.field
+    let Component = purposeField[name]
+    let display = this.state[field] || 'None'
     return (
       <React.Fragment>
         <Segment
@@ -133,18 +151,25 @@ class PurposeCard extends React.Component {
                     ) && error
                   }
                 >
-                  <TextArea
-                    autoHeight
-                    name={field}
-                    value={this.state[field]}
-                    onChange={this.handleChange}
+                  <Component 
+                    field={this.state[field]} 
+                    handleEditorChange={this.handleEditorChange} 
+                    disabled={false} 
+                    inline={false} 
+                    handleChange={this.handleChange} 
+                    name={{field}.field}
                   />
-                </Form.Field>
+		</Form.Field>
               </Form>
               <Dimmer active={inEditMode === field && !error} inverted />
             </Dimmer.Dimmable>
-          ) : (
-            data[field] || 'None'
+          ) : (  
+                <RTField 
+                  field={display} 
+                  handleEditorChange={this.handleEditorChange} 
+                  disabled={true} 
+                  inline={true}
+                />
           )}
         </Segment>
       </React.Fragment>

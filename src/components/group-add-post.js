@@ -17,6 +17,7 @@ import { capitalize, startCase } from 'lodash'
 import { DefaultDP, getTheme } from 'formula_one'
 import { errorExist } from '../utils'
 import { addPost } from '../actions'
+import { RTField } from '../fields'
 
 import inline from 'formula_one/src/css/inline.css'
 import main from '../css/group-post-card.css'
@@ -50,6 +51,11 @@ class GroupAddPost extends React.Component {
   handleChange = (e, { name, value }) => {
     this.setState({
       [name]: value
+    })
+  }
+  handleEditorChange = content => {
+    this.setState({
+      text: content.level.content
     })
   }
   handleClick = () => {
@@ -168,14 +174,12 @@ class GroupAddPost extends React.Component {
                   required
                   error={error && errorExist(message, 'text')}
                 >
-                  <TextArea
-                    autoHeight
-                    rows={2}
-                    onChange={this.handleChange}
-                    name='text'
-                    value={this.state.text}
-                    placeholder='Write something here...'
-                  />
+                <RTField 
+                  field={this.state.text} 
+                  handleEditorChange={this.handleEditorChange} 
+                  disabled={false} 
+                  inline={false} 
+                />
                 </Form.Field>
 
                 <Dimmer active={activeGroupPost.adding} inverted />
