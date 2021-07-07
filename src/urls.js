@@ -58,6 +58,10 @@ export function urlGroupMembership () {
   return `${urlBase()}membership/`
 }
 
+export function urlGroupMassMembership () {
+  return `${urlBase()}mass_membership/`
+}
+
 export function urlGroupMembershipSpecific (id) {
   return `${urlGroupMembership()}${id}/`
 }
